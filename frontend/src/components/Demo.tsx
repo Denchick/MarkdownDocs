@@ -8,12 +8,17 @@ interface IDemoState {
 }
 
 class Demo extends React.PureComponent<{}, IDemoState> {
-  state = {
-    markdownSource: sampleMarkdown,
+  constructor(props: any) {
+    super(props)
+
+    this.handleMarkdownChange = this.handleMarkdownChange.bind(this)
+    this.state = {
+      markdownSource: sampleMarkdown
+    }
   }
   
-  handleMarkdownChange(e: any) {
-    this.setState({markdownSource: e.target.value})
+  handleMarkdownChange(value: string) {
+    this.setState({markdownSource: value})
   }
 
   render() { // мб ReactMarkdownWithHtml
