@@ -7,12 +7,19 @@ interface IEditorProps {
 }
 
 const Editor = ({value, onChange}: IEditorProps) => {
+  const codeMirrorOptions = {
+    mode: 'markdown',
+    theme: 'monokai',
+    autofocus: true
+  };
+
   return (
     <form className="editor pure-form">
-      <CodeMirror options={{
-        mode: 'markdown',
-        theme: 'monokai'
-      }} value={value} onChange={onChange} />
+      <CodeMirror
+        options={codeMirrorOptions}
+        value={value}
+        onChange={onChange}
+      />
     </form>
   )
 }
