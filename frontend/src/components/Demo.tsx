@@ -21,15 +21,18 @@ class Demo extends React.PureComponent<{}, IDemoState> {
     this.setState({markdownSource: value})
   }
 
-  render() { // мб ReactMarkdownWithHtml
+  render() {
     return (
       <div className="demo">
         <div className="editor-pane">
-          <Editor value={this.state.markdownSource} onChange={this.handleMarkdownChange} />
+          <Editor
+            value={this.state.markdownSource}
+            onChange={this.handleMarkdownChange}
+          />
         </div>
 
         <div className="result-pane">
-          <Markdown
+          <Markdown 
             className="result"
             source={this.state.markdownSource}
           />
