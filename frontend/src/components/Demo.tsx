@@ -1,7 +1,7 @@
 import React from 'react';
 import Markdown from 'react-markdown';
-import sampleMarkdown from './sample-markdown';
-import Editor from './editor';
+import sampleMarkdown from '../sampleMarkdown';
+import Editor from './Editor';
 
 interface IDemoState {
   markdownSource: string;
