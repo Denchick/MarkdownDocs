@@ -1,4 +1,4 @@
-package DicumentStorage;
+package DocumentStorage;
 
 public class Document {
     private String title;
