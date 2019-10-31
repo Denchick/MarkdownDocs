@@ -1,15 +1,13 @@
 package markdowndocs.documentstorage;
 
-import javax.naming.spi.DirStateFactory.Result;
 
-import markdowndocs.infrastructure.*;
+import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.infrastructure.Result;
 
 public interface IDocumentStorage {
 	 	ValueResult<Document, DocumentStorageError> GetDocument(String documentPath);
 
-	    Result<DocumentStorageError> CreateDocument(Document document);
+	 	Result<DocumentStorageError> CreateOrUpdateDocument(String documentName, Document document);
 
-	    Result<DocumentStorageError> UpdateDocument(Document document);
-
-	    Result<DocumentStorageError> DeleteDocument(String documentPath);
+	    Result<DocumentStorageError> DeleteDocument(String documentName);
 }

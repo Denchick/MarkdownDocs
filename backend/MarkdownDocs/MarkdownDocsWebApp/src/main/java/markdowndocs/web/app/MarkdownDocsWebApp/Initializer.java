@@ -1,4 +1,5 @@
 package markdowndocs.web.app.MarkdownDocsWebApp;
+
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -11,19 +12,18 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class Initializer implements WebApplicationInitializer {
-    private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
-    
-    public void onStartup(ServletContext servletContext) throws ServletException {
-    	AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
-        ctx.register(WebAppConfig.class);
-        servletContext.addListener(new ContextLoaderListener(ctx));
+	private static final String DISPATCHER_SERVLET_NAME = "dispatcher";
 
-        ctx.setServletContext(servletContext);
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+		ctx.register(WebAppConfig.class);
+		servletContext.addListener(new ContextLoaderListener(ctx));
 
-        
-        ServletRegistration.Dynamic servlet =
-                servletContext.addServlet(DISPATCHER_SERVLET_NAME, new DispatcherServlet(ctx));
-        servlet.addMapping("/");
-        servlet.setLoadOnStartup(1);
-    }
+		ctx.setServletContext(servletContext);
+
+		ServletRegistration.Dynamic servlet = servletContext.addServlet(DISPATCHER_SERVLET_NAME,
+				new DispatcherServlet(ctx));
+		servlet.addMapping("/");
+		servlet.setLoadOnStartup(1);
+	}
 }

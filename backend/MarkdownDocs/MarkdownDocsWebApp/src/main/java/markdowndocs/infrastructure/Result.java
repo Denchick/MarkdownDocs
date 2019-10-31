@@ -2,19 +2,19 @@ package markdowndocs.infrastructure;
 
 public class Result<TError> {
 
-    private TError error;
-    private boolean isSuccess;
+	private TError error;
+	private boolean isSuccess;
 
-    public Result(TError error, boolean isSuccess) {
-        this.error = error;
-        this.isSuccess = isSuccess;
-    }
+	public Result(TError error, boolean isSuccess) {
+		this.error = error;
+		this.isSuccess = isSuccess;
+	}
 
-    public TError getError() {
-        return error;
-    }
+	public TError getError() {
+		return error;
+	}
 
-    public boolean isSuccess() {
-        return isSuccess;
-    }
+	public boolean isSuccess() {
+		return isSuccess;
+	}
 }
