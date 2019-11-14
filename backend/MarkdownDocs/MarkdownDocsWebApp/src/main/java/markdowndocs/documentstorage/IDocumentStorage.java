@@ -4,10 +4,15 @@ package markdowndocs.documentstorage;
 import markdowndocs.infrastructure.ValueResult;
 import markdowndocs.infrastructure.Result;
 
+import java.util.ArrayList;
+
 public interface IDocumentStorage {
-	 	ValueResult<Document, DocumentStorageError> GetDocument(String documentPath);
 
-	 	Result<DocumentStorageError> CreateOrUpdateDocument(String documentName, Document document);
+    ValueResult<ArrayList<MetaInfo>, DocumentStorageError> GetDocumentInfo(String userName);
 
-	    Result<DocumentStorageError> DeleteDocument(String documentName);
+    ValueResult<Document, DocumentStorageError> GetDocument(String documentPath);
+
+    Result<DocumentStorageError> CreateOrUpdateDocument(String documentName, Document document);
+
+    Result<DocumentStorageError> DeleteDocument(String documentName);
 }
