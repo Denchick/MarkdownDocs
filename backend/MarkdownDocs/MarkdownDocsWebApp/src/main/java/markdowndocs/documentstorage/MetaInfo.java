@@ -1,8 +1,14 @@
 package markdowndocs.documentstorage;
 
+
+import java.util.Date;
+import java.util.UUID;
+
 public class MetaInfo {
     private String title;
-    private String author;
+    private UUID documentId;
+    private Date createAt;
+    private Date editedAt;
 
     public String getTitle() {
         return title;
@@ -12,11 +18,28 @@ public class MetaInfo {
         this.title = title;
     }
 
-    public String getAuthor() {
-        return author;
+
+    public UUID getDocumentId() {
+        return documentId;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setDocumentId(UUID documentId) {
+        this.documentId = documentId;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getEditedAt() {
+        return editedAt;
+    }
+
+    public void setEditedAt(Date editedAt) {
+        this.editedAt = editedAt;
     }
 }

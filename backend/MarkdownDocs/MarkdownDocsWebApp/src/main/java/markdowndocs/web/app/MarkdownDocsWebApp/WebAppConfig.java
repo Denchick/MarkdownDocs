@@ -1,6 +1,6 @@
 package markdowndocs.web.app.MarkdownDocsWebApp;
 
-import markdowndocs.documentstorage.FakeMemoryDocumentStorage;
+import markdowndocs.documentstorage.DataBaseDocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -26,7 +26,7 @@ public class WebAppConfig {
 
     @Bean
     public IDocumentStorage setupDocumentStorageResolver() {
-        return new FakeMemoryDocumentStorage();
+        return new DataBaseDocumentStorage();
     }
 
 }
