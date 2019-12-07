@@ -1,8 +1,13 @@
 package markdowndocs.documentstorage;
 
+import java.util.UUID;
+
 public class MetaInfo {
+    private UUID id;
     private String title;
     private String author;
+
+    public UUID getId() { return id; }
 
     public String getTitle() {
         return title;
@@ -18,5 +23,10 @@ public class MetaInfo {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    // just for mocking
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

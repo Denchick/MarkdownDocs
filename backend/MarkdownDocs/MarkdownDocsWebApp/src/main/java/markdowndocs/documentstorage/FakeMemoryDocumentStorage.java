@@ -1,59 +1,46 @@
 package markdowndocs.documentstorage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
+import java.util.*;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
 
-import static com.sun.tools.javac.util.List.from;
-
-//Should be async 
+//Should be async
 public class FakeMemoryDocumentStorage implements IDocumentStorage {
 
-    private Map<String, Document> map;
+    private Map<UUID, Document> map;
 
     public FakeMemoryDocumentStorage() {
-        map = new HashMap<String, Document>();
+        map = new HashMap<>();
     }
 
     @Override
-    public ValueResult<ArrayList<MetaInfo>, DocumentStorageError> GetDocumentInfo(String userName) {
-        ArrayList<Document> documents = new ArrayList<Document>(map.values());
-        ArrayList<MetaInfo> result = new ArrayList<>();
-        for (Document document : documents) {
-            result.add(document.getMetaInfo());
+    public ValueResult<Collection<MetaInfo>, DocumentStorageError> GetDocumentInfos() {
+        ArrayList<MetaInfo> metaInfos = new ArrayList<>();
+        for (Map.Entry<UUID, Document> document : map.entrySet()) {
+            metaInfos.add(document.getValue().getMetaInfo());
         }
-
-        return ResultsFactory.Success(result);
-
+        return ResultsFactory.Success(metaInfos);
     }
 
-    private MetaInfo GetMeta(Document document) {
-        return document.getMetaInfo();
-    }
-
-    public ValueResult<Document, DocumentStorageError> GetDocument(String documentName) {
-
-        if (!map.containsKey(documentName)) {
+    @Override
+    public ValueResult<Document, DocumentStorageError> GetDocument(UUID documentId) {
+        if (!map.containsKey(documentId)) {
             return ResultsFactory.Failed(DocumentStorageError.NotFound);
         }
-        return ResultsFactory.Success(map.get(documentName));
+        return ResultsFactory.Success(map.get(documentId));
     }
 
-    public Result<DocumentStorageError> CreateOrUpdateDocument(String documentName, Document document) {
-        map.put(documentName, document);
+    @Override
+    public ValueResult<UUID, Object> CreateOrUpdateDocument(Document document) {
+        document.getMetaInfo().setId(UUID.randomUUID());
+        map.put(document.getMetaInfo().getId(), document);
+        return ResultsFactory.Success(document.getMetaInfo().getId());
+    }
+
+    @Override
+    public Result<DocumentStorageError> DeleteDocument(UUID documentId) {
+        map.put(documentId, null);
         return ResultsFactory.Success();
     }
-
-    public Result DeleteDocument(String documentName) {
-        if (!map.containsKey(documentName)) {
-            return ResultsFactory.FailedWith(DocumentStorageError.NotFound);
-        }
-        return ResultsFactory.Success();
-    }
-
 }
