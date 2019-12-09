@@ -4,6 +4,7 @@ import markdowndocs.documentstorage.Document;
 import markdowndocs.documentstorage.DocumentStorageError;
 import markdowndocs.documentstorage.IDocumentStorage;
 import markdowndocs.documentstorage.MetaInfo;
+import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,7 +74,7 @@ public class DocumentsController {
 
     @RequestMapping(value = "/{documentId}", method = RequestMethod.DELETE)
     public ResponseEntity<Document> DeleteDocument(@PathVariable UUID documentId) {
-        ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(documentId);
+        Result<DocumentStorageError> result = documentStorage.DeleteDocument(documentId);
 
         if (result.isSuccess())
             return new ResponseEntity(HttpStatus.OK);

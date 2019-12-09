@@ -40,7 +40,9 @@ public class FakeMemoryDocumentStorage implements IDocumentStorage {
 
     @Override
     public Result<DocumentStorageError> DeleteDocument(UUID documentId) {
-        map.put(documentId, null);
+        if (!map.containsKey(documentId))
+            return ResultsFactory.FailedWith(DocumentStorageError.NotFound);
+        map.remove(documentId);
         return ResultsFactory.Success();
     }
 }
