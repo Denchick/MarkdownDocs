@@ -7,6 +7,13 @@ public class MetaInfo {
     private String title;
     private String author;
 
+    public MetaInfo() {}
+
+    public MetaInfo(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
     public UUID getId() { return id; }
 
     public String getTitle() {
