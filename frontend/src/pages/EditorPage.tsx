@@ -1,20 +1,25 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import sampleMarkdown from '../sampleMarkdown';
-import Editor from './Editor';
+import Editor from '../components/Editor';
 
-interface IDemoState {
+interface IEditorPageState {
   markdownSource: string;
 }
 
-class Demo extends React.PureComponent<{}, IDemoState> {
-  constructor(props: any) {
+interface IEditorPageProps {
+  documentId: string;
+}
+
+export default class EditorPage extends React.PureComponent<IEditorPageProps, IEditorPageState> {
+  constructor(props: IEditorPageProps) {
     super(props)
 
     this.handleMarkdownChange = this.handleMarkdownChange.bind(this)
     this.state = {
       markdownSource: sampleMarkdown
     }
+    console.log(`Document id is ${props.documentId}`);
   }
   
   handleMarkdownChange(value: string) {
@@ -41,5 +46,3 @@ class Demo extends React.PureComponent<{}, IDemoState> {
     )
   }
 }
-
-export default Demo;

@@ -51,10 +51,12 @@
             <artifactId>postgresql</artifactId>
             <version>9.1-901-1.jdbc4</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.4</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
 
@@ -81,7 +83,7 @@
                 <version>2.1</version>
                 <configuration>
                     <port>8228</port>
-                    <path>/</path>
+                    <path>/api</path>
                     <warSourceDirectory>src/main/java</warSourceDirectory>
                 </configuration>
             </plugin>

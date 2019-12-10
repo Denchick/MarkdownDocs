@@ -5,10 +5,18 @@ import java.util.Date;
 import java.util.UUID;
 
 public class MetaInfo {
+    private UUID id;
     private String title;
     private UUID documentId;
     private Date createAt;
     private Date editedAt;
+
+    public MetaInfo() {
+    }
+
+    public UUID getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;
@@ -41,5 +49,10 @@ public class MetaInfo {
 
     public void setEditedAt(Date editedAt) {
         this.editedAt = editedAt;
+    }
+
+    // just for mocking
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

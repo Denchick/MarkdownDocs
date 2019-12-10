@@ -1,49 +1,121 @@
-Реализовать и протестировать  методы api
-Сейчас для простоты считаем что у нас единственный пользователь root.
+### `Document`
 
-Request:
+```
+interface Document {
+    MetaInfo metaInfo;
+    String content;
+}
 
-__GET /documents?user={someUserName} - получить метоинформацию о документах доступных пользователю.__
+interface MetaInfo {
+    uuid author;
+    String title;
+    DateTime createdAt;
+    DateTime updatedAt;
+}
+```
+
+### `GET /documents `
+
+Получить мета-информацию о документах доступных пользователю.
 
  Response:
-    200  - Json содержащий метоинформацию о документ и сам контент .
-    404 - если не удалось найти документ
-    500 - если в результате выполнения запроса возникли ошибки.
-    403 - неизвестный пользователь.
 
-Request:
-__GET /documents/{documentName}?user={someUserName} - получить документ documentName для пользователя someUserName__
-Response:
-    200  - Json содержащий массив метоинформаций документов пользователя
-    404 - если не удалось найти пользователя
-    500 - если в результате выполнения запроса возникли ошибки.
-    403 - неизвестный пользователь.
+```
+{
+    [
+       {
+       		String documentId;
+       		String title;
+       		// желательно, когда последний раз обновлен
+       		DateTime updatedAt;
+       		DateTime createdAt;
+       },
+       ...
+    ]
+}
+```
 
-Request:
-__PUT /documents?name={documentName}&user={someUserName} - создаёт новый документ с именем documentName, в теле запроса находиться json описывающий документ.__
-    
-Response:
-    200
-    409 - файл с таким именем уже существует
-    403 - неизвестный пользователь.
-    500 - если в результате выполнения запроса возникли ошибки.
-
-Rquest:
-__POST /documents/{documentName}?user={someUserName} - обновить документ. В теле запроса находится Json__
-
-Response:
-    200
-    404 - документ не найден.
-    403 неизвестный пользователь.
-    500 - если в результате выполнения запроса возникли ошибки.
-
-Rquest:
-
-__DELETE /documents/{documentName}?user={someUserName} - удаляет документ __
-
-Response:
-
-​    200
-​    404 - документ не найден.
-​    403 неизвестный пользователь.
+​    200  - Json содержащий список метаинформаций документов.
 ​    500 - если в результате выполнения запроса возникли ошибки.
+​    403 - неизвестный пользователь.
+
+### `GET /documents/{documentId}` 
+
+Response:
+
+```
+{
+    metaInfo: {
+        String title;
+        String content;
+        DateTime updatedAt;
+        DateTime createdAt;
+    };
+    content: string
+},
+```
+
+Получить документ.
+
+​    200  - Json содержащий документ
+​    404 - если не удалось найти документ
+​    500 - если в результате выполнения запроса возникли ошибки.
+​    403 - неизвестный пользователь.
+
+### `POST /documents `
+
+Cоздаёт новый документ, в теле запроса находиться json описывающий документ.
+
+Request
+
+```
+{
+    metaInfo: {
+        String title;
+        String content;
+        DateTime updatedAt;
+        DateTime createdAt;
+    };
+    content: string
+}
+```
+
+Response:
+    204 - Ок, в ответ пустое тело
+    403 - неизвестный пользователь.
+    500 - если в результате выполнения запроса возникли ошибки.
+
+### `PUT /documents/{documentId}` 
+
+Обновить документ.
+
+Request:
+
+```
+{
+    metaInfo: {
+        String title;
+        String content;
+        DateTime updatedAt;
+        DateTime createdAt;
+    };
+    content: string
+}
+```
+
+Response:
+    204 No content Просто фану
+    404 Документ не найден.
+    403 Неизвестный пользователь.
+    500 Если в результате выполнения запроса возникли ошибки.
+
+### `DELETE /documents/{documentId}` 
+
+Удалить документ.
+
+Response:
+
+​    204 No content
+​    404 документ не найден.
+​    403 неизвестный пользователь.
+​    500 если в результате выполнения запроса возникли ошибки.
