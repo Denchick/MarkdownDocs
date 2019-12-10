@@ -1,9 +1,10 @@
 import Document from "../domain/Document";
+import MetaInfo from "../domain/MetaInfo";
 
 export default class MockDocumentsApi {
     private document: Document = {
         metaInfo: {
-            documentId: "f63e3113-9583-47ee-9a8e-809f9077e6f7",
+            documentId: "00000000-0000-0000-0000-000000000000",
             author: "Denis",
             title: "Hello, world!",
             createdAt: new Date(),
@@ -12,11 +13,11 @@ export default class MockDocumentsApi {
         content: "This is **content**"
     };
 
-    getDocuments(): Promise<Document[]> {
+    getDocuments(): Promise<MetaInfo[]> {
         console.log("GET DOCUMENTS REQUEST");
         return new Promise((resolve, reject) => { 
             setTimeout(() => { 
-                resolve([this.document]); 
+                resolve([this.document.metaInfo]); 
             }, 2000); 
         }); 
     }
