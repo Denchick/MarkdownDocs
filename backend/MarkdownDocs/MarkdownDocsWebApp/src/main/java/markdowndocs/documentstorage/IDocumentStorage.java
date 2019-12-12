@@ -9,11 +9,13 @@ import java.util.UUID;
 
 public interface IDocumentStorage {
 
-    ValueResult<Collection<MetaInfo>, DocumentStorageError> GetDocumentInfos();
+    ValueResult<Collection<MetaInfo>, String> GetDocumentInfos(UUID userId);
 
     ValueResult<Document, DocumentStorageError> GetDocument(UUID documentId);
 
-    ValueResult<UUID, Object> CreateOrUpdateDocument(Document document);
+    ValueResult<UUID, String> CreateDocument(String title, String content, UUID userId);
+
+    Result<DocumentStorageError> UpdateDocument(Document newDocument, UUID  userId );
 
     Result<DocumentStorageError> DeleteDocument(UUID documentId);
 }

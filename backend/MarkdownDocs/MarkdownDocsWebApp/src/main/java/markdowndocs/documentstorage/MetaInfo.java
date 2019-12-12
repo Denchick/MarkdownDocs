@@ -7,12 +7,12 @@ import java.util.UUID;
 public class MetaInfo {
     private UUID id;
     private String title;
-    private UUID documentId;
     private Date createAt;
     private Date editedAt;
 
     public MetaInfo() {
     }
+
 
     public UUID getId() {
         return id;
@@ -24,15 +24,6 @@ public class MetaInfo {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-
-    public UUID getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(UUID documentId) {
-        this.documentId = documentId;
     }
 
     public Date getCreateAt() {

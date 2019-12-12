@@ -11,11 +11,11 @@ public class ResultsFactory {
 		return new ValueResult<TValue, TError>(null, error, false);
 	}
 
-	public static <TError> Result Success() {
+	public static <TError> Result<TError> Success() {
 		return new Result<TError>(null, true);
 	}
 
-	public static <TError> Result FailedWith(TError error) {
+	public static <TError> Result<TError> FailedWith(TError error) {
 		return new Result<TError>(error, false);
 	}
 

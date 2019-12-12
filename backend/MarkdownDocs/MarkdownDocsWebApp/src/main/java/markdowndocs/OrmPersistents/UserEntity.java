@@ -1,14 +1,22 @@
 package markdowndocs.OrmPersistents;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.UUID;
 
-public class User {
+@Entity
+public class UserEntity {
 
+    @Id
+    @Column(name = "id")
     private UUID id;
+    @Column(name = "login")
     private String login;
+    @Column(name = "password")
     private String passwordHash;
 
-    public User() {
+    public UserEntity() {
     }
 
     public UUID getId() {

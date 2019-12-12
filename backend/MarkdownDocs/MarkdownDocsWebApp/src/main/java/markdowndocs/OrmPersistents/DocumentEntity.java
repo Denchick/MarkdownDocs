@@ -1,20 +1,32 @@
 package markdowndocs.OrmPersistents;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 
-public class Document {
+@Entity
+public class DocumentEntity {
 
-
+    @Id
+    @Column(name = "id")
     private UUID id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "owner")
     private UUID owner;
-    private Date createAt;
-    private Date editedAt;
+    @Column(name = "createAt")
+    private Timestamp createAt;
+    @Column(name = "editedAt")
+    private Timestamp editedAt;
+    @Column(name = "content")
     private String content;
 
-    public Document() {
+    public DocumentEntity() {
     }
+
 
     public UUID getId() {
         return id;
@@ -22,6 +34,14 @@ public class Document {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public UUID getOwner() {
@@ -32,19 +52,19 @@ public class Document {
         this.owner = owner;
     }
 
-    public Date getCreateAt() {
+    public Timestamp getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Date createAt) {
+    public void setCreateAt(Timestamp createAt) {
         this.createAt = createAt;
     }
 
-    public Date getEditedAt() {
+    public Timestamp getEditedAt() {
         return editedAt;
     }
 
-    public void setEditedAt(Date editedAt) {
+    public void setEditedAt(Timestamp editedAt) {
         this.editedAt = editedAt;
     }
 
@@ -54,13 +74,5 @@ public class Document {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

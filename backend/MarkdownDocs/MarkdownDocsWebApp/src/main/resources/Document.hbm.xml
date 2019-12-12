@@ -8,7 +8,7 @@
             This class description of md document entity.
         </meta>
 
-        <id name="id" type="int" column="id">
+        <id name="id" type="UUID" column="id">
             <generator class="native"/>
         </id>
 
@@ -16,7 +16,6 @@
         <property name="title" column="title" type="String"/>
         <property name="owner" column="owner" type="UUID"/>
         <property name="createAt" column="createAt" type="Date"/>
-        <property name="editedAt" column="editedAt" type="Date"/>
         <property name="editedAt" column="editedAt" type="Date"/>
         <property name="content" column="content" type="String"/>
     </class>
