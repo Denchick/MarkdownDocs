@@ -1,10 +1,15 @@
 package markdowndocs.documentstorage;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.transform.Transformers;
 
+import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,27 +30,37 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
     public DocumentEntity GetDocumentBy(UUID id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DocumentEntity result = session.load(DocumentEntity.class, id.toString());
+        DocumentEntity result = session.load(DocumentEntity.class, id);
         session.getTransaction().commit();
 
         return result;
     }
 
-    public List<Object[]> GetMetaInfoBy(UUID userId) {
-        String queryString = " select id, title,  createAt, editedAt from " + currentConnectionString + "where owner = " + userId.toString();
+    public List<DocumentEntity> GetMetaInfoBy(UUID userId) {
+
         Session session = sessionFactory.openSession();
+        Criteria cr = session.createCriteria(DocumentEntity.class)
+                .add(Restrictions.like("owner", userId))
+                .setProjection(Projections.projectionList()
+                        .add(Projections.property("id"), "id")
+                        .add(Projections.property("title"), "title")
+                        .add(Projections.property("createAt"), "createAt")
+                        .add(Projections.property("editedAt"), "editedAt")
+                        .add(Projections.property("owner"), "owner"))
+                .setResultTransformer(Transformers.aliasToBean(DocumentEntity.class));
         session.beginTransaction();
-        Query query = session.createQuery(queryString);
-        List queryResult = query.list();
+        List<DocumentEntity> result = cr.list();
         session.getTransaction().commit();
-        return (List<Object[]>) queryResult;
+        return result;
     }
 
     public void Create(DocumentEntity entity) {
+
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(entity);
         session.getTransaction().commit();
+        session.close();
     }
 
     public void Update(DocumentEntity entity) {
@@ -53,14 +68,18 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         session.beginTransaction();
         session.update(entity);
         session.getTransaction().commit();
+        session.close();
     }
 
     public void DeleteById(UUID id) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Object record = session.load(Document.class, id);
+        DocumentEntity record = session.get(DocumentEntity.class,id);
+        session.getTransaction().commit();
+        session.beginTransaction();
         session.delete(record);
         session.getTransaction().commit();
+        session.close();
     }
 
 }

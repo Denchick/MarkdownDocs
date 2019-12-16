@@ -38,13 +38,13 @@ public class DocumentStorage implements IDocumentStorage {
 
             List<MetaInfo> result = new ArrayList<MetaInfo>();
 
-            List<Object[]> rows = queryExecutor.GetMetaInfoBy(userId);
+            List<DocumentEntity> rows = queryExecutor.GetMetaInfoBy(userId);
             if (rows.size() == 0)
                 return ResultsFactory.Success(new ArrayList<MetaInfo>() {
                 });
 
-            for (Object[] row : rows) {
-                MetaInfo metaInfo = EntityConverter.CreateFromDataRow(row);
+            for (DocumentEntity row : rows) {
+                MetaInfo metaInfo = EntityConverter.DbEntityToDocument(row).getMetaInfo();
 
                 result.add(metaInfo);
             }

@@ -3,10 +3,16 @@ package markdowndocs.documentstorage.tests;
 import junit.framework.Assert;
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
+import markdowndocs.documentstorage.DataStorageQueryExecutor;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.sql.Timestamp;
+import java.util.UUID;
+
 
 public class ORMDocumentStorageIntegrationTests extends Assert {
 

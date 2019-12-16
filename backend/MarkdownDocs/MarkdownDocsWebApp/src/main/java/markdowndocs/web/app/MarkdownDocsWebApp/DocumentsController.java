@@ -28,15 +28,15 @@ public class DocumentsController {
 
     @RequestMapping(value="/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<MetaInfo>> GetDocuments() {
-        ValueResult<Collection<MetaInfo>, DocumentStorageError> result = documentStorage.GetDocumentInfos();
-
-        if (result.isSuccess()) {
-            return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
-        }
-
-        DocumentStorageError error = result.getError();
-        if (error == DocumentStorageError.NotFound)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        ValueResult<Collection<MetaInfo>, DocumentStorageError> result = documentStorage.GetDocumentInfos();
+//
+//        if (result.isSuccess()) {
+//            return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
+//        }
+//
+//        DocumentStorageError error = result.getError();
+//        if (error == DocumentStorageError.NotFound)
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -56,19 +56,19 @@ public class DocumentsController {
 
     @RequestMapping(value="/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UUID> CreateDocument(@RequestBody Document document) {
-        ValueResult<UUID, Object> result = documentStorage.CreateOrUpdateDocument(document);
-
-        if (result.isSuccess())
-            return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
+//        ValueResult<UUID, Object> result = documentStorage.CreateOrUpdateDocument(document);
+//
+//        if (result.isSuccess())
+//            return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @RequestMapping(value = "/{documentId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity UpdateDocument(@RequestBody Document document) {
-        ValueResult<UUID, Object> result = documentStorage.CreateOrUpdateDocument(document);
-
-        if (result.isSuccess())
-            return new ResponseEntity(HttpStatus.OK);
+//        ValueResult<UUID, Object> result = documentStorage.CreateOrUpdateDocument(document);
+//
+//        if (result.isSuccess())
+//            return new ResponseEntity(HttpStatus.OK);
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

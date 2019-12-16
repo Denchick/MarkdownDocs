@@ -24,6 +24,22 @@ public class DocumentEntity {
     @Column(name = "content")
     private String content;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof DocumentEntity))
+            return false;
+
+        DocumentEntity asEntity = (DocumentEntity)obj;
+
+        return asEntity.getId() == this.getId()
+                && asEntity.getContent().equals(getContent())
+                && asEntity.getTitle().equals(getTitle())
+                && asEntity.getCreateAt().equals(getCreateAt())
+                && asEntity.getEditedAt().equals(getEditedAt())
+                && asEntity.getOwner().equals(getOwner());
+
+    }
+
     public DocumentEntity() {
     }
 
