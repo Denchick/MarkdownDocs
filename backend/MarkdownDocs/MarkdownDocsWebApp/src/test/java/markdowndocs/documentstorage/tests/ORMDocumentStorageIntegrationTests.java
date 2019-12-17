@@ -4,13 +4,11 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.documentstorage.*;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
-import org.hibernate.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
@@ -18,13 +16,11 @@ import org.mockito.junit.MockitoRule;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.*;
 
 
@@ -91,32 +87,35 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_call_update_query_executor_when_storage_update_document() throws Exception {
 
-        UUID userId = UUID.randomUUID();
-        when(queryExecutor.EntityExist(any())).thenReturn(true);
+        DocumentEntity storedDocument = EntityConverter.DocumentToDbEntity(CreateDocument(), UUID.randomUUID());
+        when(queryExecutor.GetDocumentBy(any())).thenReturn(storedDocument);
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
-        Document testDocument = CreateDocument();
+        String newTitle = "new title";
+        String newContent = "new content";
+
         ArgumentCaptor<DocumentEntity> entityCaptor = ArgumentCaptor.forClass(DocumentEntity.class);
 
-        Result<DocumentStorageError> result = documentStorage.UpdateDocument(testDocument, userId);
+        Result<DocumentStorageError> result = documentStorage.UpdateDocument(newTitle,
+                newContent, storedDocument.getId());
 
         verify(queryExecutor).Update(entityCaptor.capture());
         final DocumentEntity updatedEntity = entityCaptor.getValue();
         assertTrue(result.isSuccess());
-        assertEquals(testDocument.getMetaInfo().getId(), updatedEntity.getId());
-        assertEquals(testDocument.getMetaInfo().getTitle(), updatedEntity.getTitle());
-        assertEquals(testDocument.getMetaInfo().getCreateAt(), updatedEntity.getCreateAt());
-        assertEquals(testDocument.getMetaInfo().getEditedAt(), updatedEntity.getEditedAt());
-        assertEquals(testDocument.getContent(), updatedEntity.getContent());
+        assertEquals(newTitle, updatedEntity.getTitle());
+        assertEquals(newContent, updatedEntity.getContent());
     }
 
     @Test
     public void Should_update_failed_when_query_executor_throw_exception() throws Exception {
-        when(queryExecutor.EntityExist(any())).thenReturn(true);
+        Document testDocument = CreateDocument();
+        when(queryExecutor.GetDocumentBy(any())).thenReturn(EntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
         doThrow(new Exception("some db error")).when(queryExecutor).Update(any());
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
-        Document testDocument = CreateDocument();
 
-        Result<DocumentStorageError> result = documentStorage.UpdateDocument(testDocument, UUID.randomUUID());
+
+        Result<DocumentStorageError> result = documentStorage.UpdateDocument(testDocument.getMetaInfo().getTitle(),
+                testDocument.getContent(), testDocument.getMetaInfo().getId());
+
         assertFalse(result.isSuccess());
         assertEquals(result.getError(), DocumentStorageError.UnknownError);
     }
@@ -128,7 +127,8 @@ public class ORMDocumentStorageIntegrationTests {
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
         Document testDocument = CreateDocument();
 
-        Result<DocumentStorageError> result = documentStorage.UpdateDocument(testDocument, UUID.randomUUID());
+        Result<DocumentStorageError> result = documentStorage.UpdateDocument(testDocument.getMetaInfo().getTitle(),
+                testDocument.getContent(), testDocument.getMetaInfo().getId());
 
         assertFalse(result.isSuccess());
         assertEquals(result.getError(), DocumentStorageError.NotFound);

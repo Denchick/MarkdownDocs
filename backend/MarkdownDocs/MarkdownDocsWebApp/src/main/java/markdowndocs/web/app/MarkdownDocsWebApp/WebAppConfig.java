@@ -1,5 +1,7 @@
 package markdowndocs.web.app.MarkdownDocsWebApp;
 
+import markdowndocs.auth.FakeAuthService;
+import markdowndocs.auth.IAuthService;
 import markdowndocs.documentstorage.DocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +29,11 @@ public class WebAppConfig {
     @Bean
     public IDocumentStorage setupDocumentStorageResolver() {
         return new DocumentStorage();
+    }
+
+    @Bean
+    public IAuthService setupAuthService() {
+        return new FakeAuthService();
     }
 
 }

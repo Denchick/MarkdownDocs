@@ -15,7 +15,7 @@ public interface IDocumentStorage {
 
     ValueResult<UUID, String> CreateDocument(String title, String content, UUID userId);
 
-    Result<DocumentStorageError> UpdateDocument(Document newDocument, UUID  userId );
+    Result<DocumentStorageError> UpdateDocument(String title, String content, UUID documentId);
 
     Result<DocumentStorageError> DeleteDocument(UUID documentId);
 }

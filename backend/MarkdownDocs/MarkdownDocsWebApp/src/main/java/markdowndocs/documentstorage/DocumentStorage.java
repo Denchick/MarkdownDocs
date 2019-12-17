@@ -4,9 +4,9 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
-import org.hibernate.HibernateError;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -93,22 +93,25 @@ public class DocumentStorage implements IDocumentStorage {
     }
 
     @Override
-    public Result<DocumentStorageError> UpdateDocument(Document newDocument, UUID userId) {
+    public Result<DocumentStorageError> UpdateDocument(String title, String content, UUID documentId) {
         try {
-            DocumentEntity newDbDocumentEntity = EntityConverter.DocumentToDbEntity(newDocument, userId);
 
-            if (!queryExecutor.EntityExist(newDbDocumentEntity.getId())) {
-                logger.log(Level.SEVERE, "Can not update document: document with id " + newDbDocumentEntity.getId() + " not found");
+            DocumentEntity storedEntity = queryExecutor.GetDocumentBy(documentId);
+
+            if (storedEntity == null) {
+                logger.log(Level.SEVERE, "Can not update document: document with id " + documentId + " not found");
                 return ResultsFactory.FailedWith(DocumentStorageError.NotFound);
             }
+            storedEntity.setTitle(title);
+            storedEntity.setContent(content);
+            storedEntity.setEditedAt(new Timestamp(System.currentTimeMillis()));
 
-            queryExecutor.Update(newDbDocumentEntity);
+            queryExecutor.Update(storedEntity);
         } catch (Exception error) {
             logger.log(Level.SEVERE, "Can not update document: " + error.getMessage());
             return ResultsFactory.FailedWith(DocumentStorageError.UnknownError);
         }
         return ResultsFactory.Success();
-
     }
 
     @Override
