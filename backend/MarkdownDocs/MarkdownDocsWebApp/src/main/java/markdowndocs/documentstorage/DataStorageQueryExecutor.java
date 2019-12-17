@@ -15,22 +15,20 @@ import java.util.UUID;
 
 public class DataStorageQueryExecutor implements IQueryExecutor {
 
-    private String currentConnectionString;
     private SessionFactory sessionFactory;
 
     public DataStorageQueryExecutor() {
 
     }
 
-    public DataStorageQueryExecutor(SessionFactory sessionFactory, String currentConnectionString) {
-        this.currentConnectionString = currentConnectionString;
+    public DataStorageQueryExecutor(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     public DocumentEntity GetDocumentBy(UUID id) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DocumentEntity result = session.load(DocumentEntity.class, id);
+        DocumentEntity result = session.get(DocumentEntity.class, id);
         session.getTransaction().commit();
 
         return result;

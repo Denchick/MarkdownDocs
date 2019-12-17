@@ -17,9 +17,7 @@ import java.util.logging.Logger;
 
 public class DocumentStorage implements IDocumentStorage {
 
-    @Autowired
     private Logger logger;
-    @Autowired
     private IQueryExecutor queryExecutor;
 
     public DocumentStorage() {
@@ -64,7 +62,7 @@ public class DocumentStorage implements IDocumentStorage {
                 logger.log(Level.SEVERE, "Can not get document " + documentId + ". Document not found");
                 return ResultsFactory.Failed(DocumentStorageError.NotFound);
             }
-            return ResultsFactory.Success(EntityConverter.DbEntityToDocument(documentEntity));
+                return ResultsFactory.Success(EntityConverter.DbEntityToDocument(documentEntity));
 
         } catch (Exception error) {
             logger.log(Level.SEVERE, "Can not get document with id" + documentId + ". " + error.getMessage());

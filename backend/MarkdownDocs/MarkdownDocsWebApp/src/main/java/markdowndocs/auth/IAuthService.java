@@ -6,6 +6,6 @@ public interface IAuthService {
 
     public boolean NotAuthorized(String authToken, UUID userId);
 
-    public boolean HaveAccess(UUID userId, UUID documentId);
+    public boolean NotHaveAccess(UUID userId, UUID documentId);
 }
 

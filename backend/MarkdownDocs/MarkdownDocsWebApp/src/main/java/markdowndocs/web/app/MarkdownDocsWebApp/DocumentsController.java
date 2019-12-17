@@ -33,7 +33,7 @@ public class DocumentsController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<MetaInfo>> GetDocuments(@RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (!authService.NotAuthorized(authToken, userId))
+        if (authService.NotAuthorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(userId);
@@ -47,10 +47,10 @@ public class DocumentsController {
     @RequestMapping(value = "/{documentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Document> GetDocument(@PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (!authService.NotAuthorized(authToken, userId))
+        if (authService.NotAuthorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (!authService.HaveAccess(userId, documentId))
+        if (authService.NotHaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(documentId);
@@ -84,7 +84,7 @@ public class DocumentsController {
         if (authService.NotAuthorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (!authService.HaveAccess(userId, documentId))
+        if (authService.NotHaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Result<DocumentStorageError> result = documentStorage.UpdateDocument(createRequestBody.title, createRequestBody.content, documentId);
@@ -105,7 +105,7 @@ public class DocumentsController {
         if (authService.NotAuthorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (!authService.HaveAccess(userId, documentId))
+        if (authService.NotHaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Result<DocumentStorageError> result = documentStorage.DeleteDocument(documentId);

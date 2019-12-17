@@ -6,11 +6,11 @@ public class FakeAuthService implements IAuthService {
 
     @Override
     public boolean NotAuthorized(String authToken, UUID userId) {
-        return true;
+        return false;
     }
 
     @Override
-    public boolean HaveAccess(UUID userId, UUID documentId) {
-        return true;
+    public boolean NotHaveAccess(UUID userId, UUID documentId) {
+        return false;
     }
 }
