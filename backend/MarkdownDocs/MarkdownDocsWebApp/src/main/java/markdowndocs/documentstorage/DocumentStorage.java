@@ -5,7 +5,6 @@ import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
 import org.hibernate.HibernateError;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class DocumentStorage implements IDocumentStorage {
 
             return ResultsFactory.Success(result);
 
-        } catch (HibernateError error) {
+        } catch (Exception error) {
             logger.log(Level.SEVERE, error.getMessage());
             return ResultsFactory.Failed("Can not save document to storage");
         }
@@ -60,12 +59,15 @@ public class DocumentStorage implements IDocumentStorage {
     @Override
     public ValueResult<Document, DocumentStorageError> GetDocument(UUID documentId) {
         try {
-
             DocumentEntity documentEntity = queryExecutor.GetDocumentBy(documentId);
+            if (documentEntity == null) {
+                logger.log(Level.SEVERE, "Can not get document " + documentId + ". Document not found");
+                return ResultsFactory.Failed(DocumentStorageError.NotFound);
+            }
             return ResultsFactory.Success(EntityConverter.DbEntityToDocument(documentEntity));
 
-        } catch (HibernateError error) {
-            logger.log(Level.SEVERE, error.getMessage());
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "Can not get document with id" + documentId + ". " + error.getMessage());
             return ResultsFactory.Failed(DocumentStorageError.UnknownError);
         }
     }
@@ -75,10 +77,14 @@ public class DocumentStorage implements IDocumentStorage {
 
         Document newDocument = Document.CreateBy(title, content);
         DocumentEntity newDbDocumentEntity = EntityConverter.DocumentToDbEntity(newDocument, userId);
-
         try {
+            if (queryExecutor.EntityExist(newDbDocumentEntity.getId())) {
+                logger.log(Level.WARNING, "Try create document with id " + newDbDocumentEntity.getId() + ". Id already exist");
+                return ResultsFactory.Failed("Document with this already exist");
+            }
+
             queryExecutor.Create(newDbDocumentEntity);
-        } catch (HibernateError error) {
+        } catch (Exception error) {
             logger.log(Level.SEVERE, error.getMessage());
             return ResultsFactory.Failed("Can not save document to storage");
         }
@@ -88,16 +94,19 @@ public class DocumentStorage implements IDocumentStorage {
 
     @Override
     public Result<DocumentStorageError> UpdateDocument(Document newDocument, UUID userId) {
-        DocumentEntity newDbDocumentEntity = EntityConverter.DocumentToDbEntity(newDocument, userId);
-
         try {
-            queryExecutor.Update(newDbDocumentEntity);
+            DocumentEntity newDbDocumentEntity = EntityConverter.DocumentToDbEntity(newDocument, userId);
 
-        } catch (HibernateError error) {
-            logger.log(Level.SEVERE, error.getMessage());
+            if (!queryExecutor.EntityExist(newDbDocumentEntity.getId())) {
+                logger.log(Level.SEVERE, "Can not update document: document with id " + newDbDocumentEntity.getId() + " not found");
+                return ResultsFactory.FailedWith(DocumentStorageError.NotFound);
+            }
+
+            queryExecutor.Update(newDbDocumentEntity);
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "Can not update document: " + error.getMessage());
             return ResultsFactory.FailedWith(DocumentStorageError.UnknownError);
         }
-
         return ResultsFactory.Success();
 
     }
@@ -105,10 +114,13 @@ public class DocumentStorage implements IDocumentStorage {
     @Override
     public Result<DocumentStorageError> DeleteDocument(UUID documentId) {
         try {
+            if (!queryExecutor.EntityExist(documentId)) {
+                logger.log(Level.SEVERE, "Can not delete document with id " + documentId + ". Document not found");
+                return ResultsFactory.FailedWith(DocumentStorageError.NotFound);
+            }
             queryExecutor.DeleteById(documentId);
-
-        } catch (HibernateError error) {
-            logger.log(Level.SEVERE, error.getMessage());
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "Can not delete document with id " + documentId + ". " + error.getMessage());
             return ResultsFactory.FailedWith(DocumentStorageError.UnknownError);
         }
 

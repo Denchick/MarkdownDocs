@@ -42,7 +42,7 @@ public class DataStorageQueryExecutorTests {
     }
 
     @Test
-    public void Should_create_entity_in_db() {
+    public void Should_create_entity_in_db() throws Exception {
 
         DocumentEntity testEntity = CreateTestEntity();
 
@@ -58,7 +58,7 @@ public class DataStorageQueryExecutorTests {
     }
 
     @Test
-    public void Should_update_document_in_db() {
+    public void Should_update_document_in_db() throws Exception {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
@@ -80,7 +80,7 @@ public class DataStorageQueryExecutorTests {
     }
 
     @Test
-    public void Should_return_saved_document_from_db() {
+    public void Should_return_saved_document_from_db() throws Exception {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
@@ -90,7 +90,7 @@ public class DataStorageQueryExecutorTests {
     }
 
     @Test
-    public void Should_return_all_metainfo_for_user() {
+    public void Should_return_all_metainfo_for_user() throws Exception {
         UUID userId = UUID.randomUUID();
         DocumentEntity entity1 = CreateTestEntity();
         DocumentEntity entity2 = CreateTestEntity();
@@ -116,7 +116,7 @@ public class DataStorageQueryExecutorTests {
     }
 
     @Test
-    public void Should_delete_entity_from_db() {
+    public void Should_delete_entity_from_db() throws Exception {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
@@ -131,6 +131,26 @@ public class DataStorageQueryExecutorTests {
 
         assertNull(storedEntity);
     }
+
+    @Test
+    public void Should_return_true_when_entity_in_storage() throws Exception {
+        DocumentEntity entity = CreateTestEntity();
+        queryExecutor.Create(entity);
+
+        boolean entityExist = queryExecutor.EntityExist(entity.getId());
+
+        assertTrue(entityExist);
+    }
+
+    @Test
+    public void Should_return_false_when_entity_not_in_storage() throws Exception {
+        DocumentEntity entity = CreateTestEntity();
+
+        boolean entityExist = queryExecutor.EntityExist(entity.getId());
+
+        assertFalse(entityExist);
+    }
+
 
     private DocumentEntity CreateTestEntity() {
         DocumentEntity testEntity = new DocumentEntity();

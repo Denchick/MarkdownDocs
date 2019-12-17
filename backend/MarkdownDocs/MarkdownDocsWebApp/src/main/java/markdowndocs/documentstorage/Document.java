@@ -19,6 +19,16 @@ public class Document {
         return metaInfo;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Document))
+            return false;
+        Document objAsDocument = (Document) obj;
+
+        return objAsDocument.metaInfo.equals(getMetaInfo()) && objAsDocument.content.equals(getContent());
+
+    }
+
     public String getContent() {
         return content;
     }

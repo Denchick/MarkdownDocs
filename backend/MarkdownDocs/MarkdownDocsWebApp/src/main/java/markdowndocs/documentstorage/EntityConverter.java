@@ -34,20 +34,4 @@ public class EntityConverter {
 
         return new Document(metaInfo, documentEntity.getContent());
     }
-
-    public static MetaInfo CreateFromDataRow(Object[] row) {
-        UUID id = UUID.fromString(row[0].toString());
-        String title = row[1].toString();
-        Timestamp createAt = new Timestamp((int) row[2]);
-        Timestamp editedAt = new Timestamp((int) row[3]);
-
-        MetaInfo metaInfo = new MetaInfo();
-        metaInfo.setTitle(title);
-        metaInfo.setId(id);
-        metaInfo.setCreateAt(createAt);
-        metaInfo.setEditedAt(editedAt);
-
-        return metaInfo;
-
-    }
 }

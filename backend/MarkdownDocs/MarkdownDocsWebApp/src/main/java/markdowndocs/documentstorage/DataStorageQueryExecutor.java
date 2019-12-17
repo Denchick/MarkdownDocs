@@ -27,7 +27,7 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         this.sessionFactory = sessionFactory;
     }
 
-    public DocumentEntity GetDocumentBy(UUID id) {
+    public DocumentEntity GetDocumentBy(UUID id) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         DocumentEntity result = session.load(DocumentEntity.class, id);
@@ -36,7 +36,7 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         return result;
     }
 
-    public List<DocumentEntity> GetMetaInfoBy(UUID userId) {
+    public List<DocumentEntity> GetMetaInfoBy(UUID userId) throws Exception {
 
         Session session = sessionFactory.openSession();
         Criteria cr = session.createCriteria(DocumentEntity.class)
@@ -54,7 +54,7 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         return result;
     }
 
-    public void Create(DocumentEntity entity) {
+    public void Create(DocumentEntity entity) throws Exception {
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -63,7 +63,7 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         session.close();
     }
 
-    public void Update(DocumentEntity entity) {
+    public void Update(DocumentEntity entity) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.update(entity);
@@ -71,15 +71,26 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         session.close();
     }
 
-    public void DeleteById(UUID id) {
+    public void DeleteById(UUID id) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DocumentEntity record = session.get(DocumentEntity.class,id);
+        DocumentEntity record = session.get(DocumentEntity.class, id);
         session.getTransaction().commit();
         session.beginTransaction();
         session.delete(record);
         session.getTransaction().commit();
         session.close();
+    }
+
+    @Override
+    public boolean EntityExist(UUID id) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        DocumentEntity result = session.get(DocumentEntity.class, id);
+        session.getTransaction().commit();
+        session.close();
+
+        return result != null;
     }
 
 }
