@@ -5,7 +5,7 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class EntityConverter {
+public class StorageEntityConverter {
 
     public static DocumentEntity DocumentToDbEntity(Document document, UUID owner) {
         DocumentEntity documentEntity = new DocumentEntity();

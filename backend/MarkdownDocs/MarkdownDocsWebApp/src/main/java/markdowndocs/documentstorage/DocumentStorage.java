@@ -4,7 +4,6 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class DocumentStorage implements IDocumentStorage {
                 });
 
             for (DocumentEntity row : rows) {
-                MetaInfo metaInfo = EntityConverter.DbEntityToDocument(row).getMetaInfo();
+                MetaInfo metaInfo = StorageEntityConverter.DbEntityToDocument(row).getMetaInfo();
 
                 result.add(metaInfo);
             }
@@ -62,7 +61,7 @@ public class DocumentStorage implements IDocumentStorage {
                 logger.log(Level.SEVERE, "Can not get document " + documentId + ". Document not found");
                 return ResultsFactory.Failed(DocumentStorageError.NotFound);
             }
-                return ResultsFactory.Success(EntityConverter.DbEntityToDocument(documentEntity));
+                return ResultsFactory.Success(StorageEntityConverter.DbEntityToDocument(documentEntity));
 
         } catch (Exception error) {
             logger.log(Level.SEVERE, "Can not get document with id" + documentId + ". " + error.getMessage());
@@ -74,7 +73,7 @@ public class DocumentStorage implements IDocumentStorage {
     public ValueResult<UUID, String> CreateDocument(String title, String content, UUID userId) {
 
         Document newDocument = Document.CreateBy(title, content);
-        DocumentEntity newDbDocumentEntity = EntityConverter.DocumentToDbEntity(newDocument, userId);
+        DocumentEntity newDbDocumentEntity = StorageEntityConverter.DocumentToDbEntity(newDocument, userId);
         try {
             if (queryExecutor.EntityExist(newDbDocumentEntity.getId())) {
                 logger.log(Level.WARNING, "Try create document with id " + newDbDocumentEntity.getId() + ". Id already exist");

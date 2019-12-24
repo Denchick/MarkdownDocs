@@ -10,7 +10,7 @@ public interface IQueryExecutor {
 
     public List<DocumentEntity> GetMetaInfoBy(UUID userId) throws Exception;
 
-    public void Create(DocumentEntity entity) throws Exception;
+    public <T> void Create(T entity) throws Exception;
 
     public void Update(DocumentEntity entity) throws Exception;
 

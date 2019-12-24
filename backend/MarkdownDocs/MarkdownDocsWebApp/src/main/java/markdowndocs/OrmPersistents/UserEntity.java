@@ -15,6 +15,10 @@ public class UserEntity {
     private String login;
     @Column(name = "password")
     private String passwordHash;
+    @Column(name = "authToken")
+    private String authToken;
+    @Column(name = "expireAt")
+    private String expireAt;
 
     public UserEntity() {
     }
@@ -41,5 +45,21 @@ public class UserEntity {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public String getExpireAt() {
+        return expireAt;
+    }
+
+    public void setExpireAt(String expireAt) {
+        this.expireAt = expireAt;
     }
 }

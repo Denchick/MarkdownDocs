@@ -4,7 +4,7 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.Document;
-import markdowndocs.documentstorage.EntityConverter;
+import markdowndocs.documentstorage.StorageEntityConverter;
 import markdowndocs.documentstorage.MetaInfo;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -99,15 +99,15 @@ public class DataStorageQueryExecutorTests {
         queryExecutor.Create(entity1);
         queryExecutor.Create(entity2);
 
-        Document entity1AsDocument = EntityConverter.DbEntityToDocument(entity1);
-        Document entity2AsDocument = EntityConverter.DbEntityToDocument(entity2);
+        Document entity1AsDocument = StorageEntityConverter.DbEntityToDocument(entity1);
+        Document entity2AsDocument = StorageEntityConverter.DbEntityToDocument(entity2);
 
         List<DocumentEntity> rows = queryExecutor.GetMetaInfoBy(userId);
         List<MetaInfo> actualMetas = new ArrayList<>();
 
         for (DocumentEntity row : rows
         ) {
-            actualMetas.add(EntityConverter.DbEntityToDocument(row).getMetaInfo());
+            actualMetas.add(StorageEntityConverter.DbEntityToDocument(row).getMetaInfo());
         }
 
         assertTrue(actualMetas.contains(entity1AsDocument.getMetaInfo()));
