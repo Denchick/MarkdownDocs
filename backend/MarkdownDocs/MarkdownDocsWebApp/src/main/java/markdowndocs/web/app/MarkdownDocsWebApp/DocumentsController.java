@@ -71,6 +71,10 @@ public class DocumentsController {
         if (authService.NotAuthorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
+        if (createRequestBody.title == null) {
+            createRequestBody.title = CreateTitleFromContent(createRequestBody.content);
+        }
+
         ValueResult<UUID, String> result = documentStorage.CreateDocument(createRequestBody.title, createRequestBody.content, userId);
 
         if (result.isSuccess())
@@ -86,6 +90,10 @@ public class DocumentsController {
 
         if (authService.NotHaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        if (createRequestBody.title == null) {
+            createRequestBody.title = CreateTitleFromContent(createRequestBody.content);
+        }
 
         Result<DocumentStorageError> result = documentStorage.UpdateDocument(createRequestBody.title, createRequestBody.content, documentId);
 
@@ -118,6 +126,20 @@ public class DocumentsController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private static String CreateTitleFromContent(String content) {
+        StringBuilder titleBuilder = new StringBuilder();
+        for (char symbol : content.toCharArray()) {
+            if (symbol == '\n')
+                break;
+            if (Character.isLetter(symbol) || Character.isSpaceChar(symbol))
+                titleBuilder.append(symbol);
+        }
+        String title = titleBuilder.toString();
+        if (title.isEmpty())
+            return "new document";
+        return title;
     }
 }
 

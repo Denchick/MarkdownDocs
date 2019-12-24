@@ -1,8 +1,9 @@
 import { PureComponent } from "react";
-import { Table } from "semantic-ui-react";
 import React from "react";
 import MetaInfo from "../domain/MetaInfo";
-import { Link } from "react-router-dom";
+import DocumentsList from "../components/DocumentsList";
+import { Redirect } from "react-router";
+import { createDocument, deleteDocument } from "../api/DocumentsApi";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;
@@ -10,12 +11,16 @@ interface IDocumentsPageProps {
 
 interface IDocumentsPageState {
   infos: MetaInfo[];
+  newDocumentId: string;
 }
 
 export default class DocumentsPage extends PureComponent<IDocumentsPageProps, IDocumentsPageState>  {
   constructor(props: IDocumentsPageProps) {
     super(props);
-    this.state = {infos: []}
+    this.state = {
+      infos: [],
+      newDocumentId: ''
+    }
   }
   componentDidMount() {
     console.log("call componentDidMount in DocumentPage");
@@ -23,38 +28,43 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
       .then(data => this.setState({infos: data}) );
   }
 
-  renderHeader() {
-    return (
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Title</Table.HeaderCell>
-          <Table.HeaderCell>UpdatedAt</Table.HeaderCell>
-          <Table.HeaderCell>Author</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-    );
+  async handleCreateDocument() {
+    const documentId = await createDocument();
+    this.setState({newDocumentId: documentId});
   }
-  
-  renderMetaInfo(metaInfo: MetaInfo) {
+
+  handleDelete = (documentId: string) => {
+    this.setState({infos: this.state.infos.filter(info => info.id !== documentId)})
+    deleteDocument(documentId);
+  }
+
+
+  renderNoDocumentsMessage() {
     return (
-      <Table.Row>
-        <Table.Cell>
-          <Link to={`/documents/${metaInfo.documentId}`}>
-            {metaInfo.title}
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{metaInfo.updatedAt.toJSON()}</Table.Cell>
-        <Table.Cell>{metaInfo.author}</Table.Cell>
-      </Table.Row>
+      <p>
+        You dont have documents yet &nbsp;&nbsp;&nbsp;
+        <button
+          className="pure-button"
+          onClick={this.handleCreateDocument.bind(this)}
+        >
+          Create!
+        </button>
+      </p>
     );
   }
 
   render() {
+    if (this.state.newDocumentId)
+      return <Redirect to={`/documents/${this.state.newDocumentId}`} />;
+    if (this.state.infos.length === 0)
+      return this.renderNoDocumentsMessage();
     return (
-      <Table>
-        {this.renderHeader()}
-        {this.state.infos.map(info => this.renderMetaInfo(info))}
-      </Table>
+      <div>
+        <DocumentsList infos={this.state.infos} handleDelete={this.handleDelete}/>
+        <button className="button-xlarge pure-button" style={{marginTop: 10}} onClick={this.handleCreateDocument.bind(this)}>
+          Create new document!
+        </button>
+      </div>
     );
   }
 }

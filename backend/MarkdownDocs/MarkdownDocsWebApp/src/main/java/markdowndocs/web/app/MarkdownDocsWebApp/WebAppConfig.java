@@ -41,8 +41,7 @@ public class WebAppConfig {
                 "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class",
                 "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db;DB_CLOSE_ON_EXIT=FALSE");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
 
         IQueryExecutor queryExecutor = new DataStorageQueryExecutor(sessionFactory);

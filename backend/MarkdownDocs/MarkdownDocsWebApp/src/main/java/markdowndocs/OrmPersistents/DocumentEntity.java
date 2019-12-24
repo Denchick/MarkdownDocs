@@ -21,7 +21,7 @@ public class DocumentEntity {
     private Timestamp createAt;
     @Column(name = "editedAt")
     private Timestamp editedAt;
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "Text")
     private String content;
 
     @Override
