@@ -1,4 +1,6 @@
-### `Document`
+
+
+### Document`
 
 ```
 interface Document {
@@ -7,10 +9,10 @@ interface Document {
 }
 
 interface MetaInfo {
-    uuid author;
+    uuid Id;
     String title;
-    DateTime createdAt;
-    DateTime updatedAt;
+    Timestamp createdAt;
+    Timestamp updatedAt;
 }
 ```
 
@@ -24,11 +26,10 @@ interface MetaInfo {
 {
     [
        {
-       		String documentId;
-       		String title;
-       		// желательно, когда последний раз обновлен
-       		DateTime updatedAt;
-       		DateTime createdAt;
+       		String Id;
+       		String title;       		
+       		Timestamp updatedAt;
+       		Timestamp createdAt;
        },
        ...
     ]
@@ -69,19 +70,13 @@ Cоздаёт новый документ, в теле запроса наход
 Request
 
 ```
-{
-    metaInfo: {
-        String title;
-        String content;
-        DateTime updatedAt;
-        DateTime createdAt;
-    };
-    content: string
+{    
+   content: string // тут важно понимать один костыль, первая строка content это и есть title 
 }
 ```
 
 Response:
-    204 - Ок, в ответ пустое тело
+    204 - Ок, в ответ UUID созданного документа
     403 - неизвестный пользователь.
     500 - если в результате выполнения запроса возникли ошибки.
 
@@ -92,14 +87,8 @@ Response:
 Request:
 
 ```
-{
-    metaInfo: {
-        String title;
-        String content;
-        DateTime updatedAt;
-        DateTime createdAt;
-    };
-    content: string
+{    
+    content: string // тут важно понимать один костыль, первая строка content это и есть title 
 }
 ```
 
@@ -119,3 +108,53 @@ Response:
 ​    404 документ не найден.
 ​    403 неизвестный пользователь.
 ​    500 если в результате выполнения запроса возникли ошибки.
+
+### `POST /users`
+
+Зарегистрировать нового пользователя.
+
+Request:
+
+```{
+{
+	login: string 
+	password: string 
+}
+```
+
+Response:
+		204 - и редирект на окно аутентификации 
+
+​		 409 - пользователь с таким логином уже существует
+
+​         500 - если в результате обработки запроса возникли ошибки
+
+### `GET /users`
+
+Залогинится в сервис.
+
+Request:
+
+```
+{
+	login: string 
+	password: string 
+}
+```
+
+
+
+Response:
+
+​	200 - в теле ответа 
+
+```
+{
+	userId : UUID,	
+	Auth : String
+}
+```
+
+401 - не удалось аутентифицировать пользователя
+
+500 - если в результате обработки запроса возникли ошибки
