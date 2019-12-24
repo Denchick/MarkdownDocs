@@ -56,7 +56,7 @@ public class DocumentStorage implements IDocumentStorage {
     @Override
     public ValueResult<Document, DocumentStorageError> GetDocument(UUID documentId) {
         try {
-            DocumentEntity documentEntity = queryExecutor.GetDocumentBy(documentId);
+            DocumentEntity documentEntity = queryExecutor.GetEntityBy(documentId);
             if (documentEntity == null) {
                 logger.log(Level.SEVERE, "Can not get document " + documentId + ". Document not found");
                 return ResultsFactory.Failed(DocumentStorageError.NotFound);
@@ -93,7 +93,7 @@ public class DocumentStorage implements IDocumentStorage {
     public Result<DocumentStorageError> UpdateDocument(String title, String content, UUID documentId) {
         try {
 
-            DocumentEntity storedEntity = queryExecutor.GetDocumentBy(documentId);
+            DocumentEntity storedEntity = queryExecutor.GetEntityBy(documentId);
 
             if (storedEntity == null) {
                 logger.log(Level.SEVERE, "Can not update document: document with id " + documentId + " not found");

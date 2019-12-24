@@ -83,7 +83,7 @@ public class DataStorageQueryExecutorTests {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
-        DocumentEntity storedEntity = queryExecutor.GetDocumentBy(testEntity.getId());
+        DocumentEntity storedEntity = queryExecutor.GetEntityBy(testEntity.getId());
 
         assertEquals(storedEntity, testEntity);
     }

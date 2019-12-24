@@ -25,7 +25,7 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         this.sessionFactory = sessionFactory;
     }
 
-    public DocumentEntity GetDocumentBy(UUID id) throws Exception {
+    public DocumentEntity GetEntityBy(UUID id) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         DocumentEntity result = session.get(DocumentEntity.class, id);
@@ -52,8 +52,8 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         return result;
     }
 
-    public void Create(DocumentEntity entity) throws Exception {
-
+    @Override
+    public <T> void Create(T entity) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.save(entity);
@@ -61,13 +61,15 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         session.close();
     }
 
-    public void Update(DocumentEntity entity) throws Exception {
+    @Override
+    public <T> void Update(T entity) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         session.update(entity);
         session.getTransaction().commit();
         session.close();
     }
+
 
     public void DeleteById(UUID id) throws Exception {
         Session session = sessionFactory.openSession();

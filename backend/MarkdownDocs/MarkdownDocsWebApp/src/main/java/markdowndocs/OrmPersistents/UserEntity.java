@@ -3,6 +3,7 @@ package markdowndocs.OrmPersistents;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +19,7 @@ public class UserEntity {
     @Column(name = "authToken")
     private String authToken;
     @Column(name = "expireAt")
-    private String expireAt;
+    private Timestamp expireAt;
 
     public UserEntity() {
     }
@@ -55,11 +56,22 @@ public class UserEntity {
         this.authToken = authToken;
     }
 
-    public String getExpireAt() {
+
+
+    public static UserEntity CreateEntityWithPasswordHashing(String login, String password, UUID userId) {
+        UserEntity newUser = new UserEntity();
+        newUser.setLogin(login);
+        //encrypt password
+        newUser.setPasswordHash(password);
+        newUser.setId(userId);
+        return newUser;
+    }
+
+    public Timestamp getExpireAt() {
         return expireAt;
     }
 
-    public void setExpireAt(String expireAt) {
+    public void setExpireAt(Timestamp expireAt) {
         this.expireAt = expireAt;
     }
 }

@@ -12,7 +12,7 @@ public interface IAuthService {
 
     public Result<AuthError> Registry(AuthCredentials credentials);
 
-    public ValueResult<Pair<UUID, String>, AuthError> Login(AuthCredentials);
+    public ValueResult<Pair<UUID, String>, AuthError> Login(AuthCredentials credentials);
 
     public ValueResult<Boolean, AuthError> NotAuthorized(String authToken, UUID userId);
 

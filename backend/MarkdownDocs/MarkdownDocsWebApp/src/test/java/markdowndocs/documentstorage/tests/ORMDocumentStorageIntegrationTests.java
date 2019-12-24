@@ -88,7 +88,7 @@ public class ORMDocumentStorageIntegrationTests {
     public void Should_call_update_query_executor_when_storage_update_document() throws Exception {
 
         DocumentEntity storedDocument = StorageEntityConverter.DocumentToDbEntity(CreateDocument(), UUID.randomUUID());
-        when(queryExecutor.GetDocumentBy(any())).thenReturn(storedDocument);
+        when(queryExecutor.GetEntityBy(any())).thenReturn(storedDocument);
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
         String newTitle = "new title";
         String newContent = "new content";
@@ -108,7 +108,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_update_failed_when_query_executor_throw_exception() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetDocumentBy(any())).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
+        when(queryExecutor.GetEntityBy(any())).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
         doThrow(new Exception("some db error")).when(queryExecutor).Update(any());
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
@@ -137,7 +137,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_get_document_from_storage() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetDocumentBy(any())).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
+        when(queryExecutor.GetEntityBy(any())).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(testDocument.getMetaInfo().getId());
@@ -150,7 +150,7 @@ public class ORMDocumentStorageIntegrationTests {
     public void Should_get_fail_when_query_executor_throw_exception() throws Exception {
 
         Document testDocument = CreateDocument();
-        doThrow(new Exception("some db error")).when(queryExecutor).GetDocumentBy(any());
+        doThrow(new Exception("some db error")).when(queryExecutor).GetEntityBy(any());
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(testDocument.getMetaInfo().getId());
@@ -162,7 +162,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_get_fail_when_document_not_contain_in_storage() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetDocumentBy(any())).thenReturn(null);
+        when(queryExecutor.GetEntityBy(any())).thenReturn(null);
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(testDocument.getMetaInfo().getId());
