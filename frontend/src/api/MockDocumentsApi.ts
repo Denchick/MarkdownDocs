@@ -4,11 +4,11 @@ import MetaInfo from "../domain/MetaInfo";
 export default class MockDocumentsApi {
     private document: Document = {
         metaInfo: {
-            documentId: "00000000-0000-0000-0000-000000000000",
+            id: "00000000-0000-0000-0000-000000000000",
             author: "Denis",
             title: "Hello, world!",
-            createdAt: new Date(),
-            updatedAt: new Date()
+            createdAt: Date.now(),
+            editedAt: Date.now()
         },
         content: "This is **content**"
     };
@@ -35,7 +35,7 @@ export default class MockDocumentsApi {
         console.log(`CREATE DOCUMENT REQUEST`);
         return new Promise((resolve, reject) => { 
             setTimeout(() => { 
-                resolve(this.document.metaInfo.documentId); 
+                resolve(this.document.metaInfo.id); 
             }, 2000); 
         });
     }

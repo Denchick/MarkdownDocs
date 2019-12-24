@@ -1,7 +1,7 @@
 export default interface MetaInfo {
-    documentId: string;
+    id: string;
     author: string;
     title: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: number;
+    editedAt: number;
 }
