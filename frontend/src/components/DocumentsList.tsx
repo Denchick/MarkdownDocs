@@ -1,6 +1,7 @@
 import React from "react";
 import MetaInfo from "../models/MetaInfo";
 import { Link } from "react-router-dom";
+import { copyToClipboard } from "../utils/common";
 
 interface IDocumentsListProps {
   infos: MetaInfo[];
@@ -8,12 +9,16 @@ interface IDocumentsListProps {
 }
 
 const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
+  const handleShareDocument = async () => {
+    
+  }
+  
   const renderHeader = () => {
     return (
       <tr key="header">
         <th>Title</th>
         <th>Last update at</th>
-        <th>Author</th>
+        <th>Sharing</th>
         <th></th>
       </tr>
     );
@@ -28,10 +33,18 @@ const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
           </Link>
         </td>
         <td>{new Date(metaInfo.editedAt).toLocaleString()}</td>
-        <td>{metaInfo.author || '<unknown author>'}</td>
+        <td>{renderShare(metaInfo)}</td>
         <td><button className="pure-button" onClick={() => handleDelete(metaInfo.id)}>Delete?</button></td>
       </tr>
     );
+  }
+
+  const renderShare = (metaInfo: MetaInfo) => {
+    if (!metaInfo.shareToken) {
+      return <a href="#" onClick={() => }
+    }
+    const path = `/documents/${metaInfo.shareToken}`;
+    return <a style={{textDecoration: 'underline'}} onClick={() => copyToClipboard(path)}>Copy ✂️ {path}</a>;
   }
   
   return (
