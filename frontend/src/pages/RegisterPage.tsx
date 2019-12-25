@@ -1,6 +1,7 @@
 import { Component } from "react";
 import React from "react";
 import { registerUser } from "../api/UsersApi";
+import { Redirect } from "react-router-dom";
 
 interface IRegisterPageState {
     isSuccessRegister: boolean
@@ -32,7 +33,7 @@ export default class RegisterPage extends Component<{},IRegisterPageState> {
 
     render() {
         if (this.state.isSuccessRegister) {
-            
+            return <Redirect push to="/login" />
         }
         return (
             <div style={{width: 400}}>
