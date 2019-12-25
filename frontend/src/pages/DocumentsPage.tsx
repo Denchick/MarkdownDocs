@@ -5,6 +5,7 @@ import DocumentsList from "../components/DocumentsList";
 import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;
@@ -36,9 +37,14 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     this.setState({newDocumentId: documentId});
   }
 
-  handleDelete = (documentId: string) => {
+  handleDelete = async (documentId: string) => {
     this.setState({infos: this.state.infos.filter(info => info.id !== documentId)})
-    deleteDocument(documentId);
+    const response = await deleteDocument(documentId);
+    if (response.ok) {
+      toast.info("Deleted success!");
+    } else {
+      toast.error("Something goes wrong")
+    }
   }
 
   handleLogout = () => {

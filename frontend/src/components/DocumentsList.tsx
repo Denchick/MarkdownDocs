@@ -5,7 +5,7 @@ import { copyToClipboard } from "../utils/common";
 
 interface IDocumentsListProps {
   infos: MetaInfo[];
-  handleDelete: (documentId: string) => void;
+  handleDelete: (documentId: string) => Promise<void>;
 }
 
 const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
@@ -34,7 +34,8 @@ const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
         </td>
         <td>{new Date(metaInfo.editedAt).toLocaleString()}</td>
         <td>{renderShare(metaInfo)}</td>
-        <td><button className="pure-button" onClick={() => handleDelete(metaInfo.id)}>Delete?</button></td>
+        {// TODO МБ убрать можно async await}
+        <td><button className="pure-button" onClick={async () => await handleDelete(metaInfo.id)}>Delete?</button></td>
       </tr>
     );
   }
