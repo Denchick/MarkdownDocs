@@ -2,10 +2,7 @@ package markdowndocs.web.app.MarkdownDocsWebApp;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
-import markdowndocs.auth.AuthService;
-import markdowndocs.auth.CredentialsValidator;
-import markdowndocs.auth.IAuthService;
-import markdowndocs.auth.IAuthValidator;
+import markdowndocs.auth.*;
 import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.DocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
@@ -49,7 +46,8 @@ public class WebAppConfig {
         IAuthValidator authValidator = new CredentialsValidator();
         IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
         Logger logger = LoggerSingleton.create();
-        return new AuthService(queryExecutor, authValidator, logger);
+        //return new AuthService(queryExecutor, authValidator, logger);
+        return new FakeAuthService();
     }
 }
 

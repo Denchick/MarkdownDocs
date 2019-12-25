@@ -3,6 +3,7 @@ package markdowndocs.auth;
 
 import markdowndocs.documentstorage.IQueryExecutor;
 import markdowndocs.infrastructure.Result;
+import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
 import org.javatuples.Pair;
 
