@@ -5,6 +5,8 @@ import EditorPage from './pages/EditorPage';
 import { getDocuments } from './api/DocumentsApi';
 import LoginPage from './pages/LoginPage';
 import UserInfoForm from './pages/RegisterPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface MatchParams {
   documentId: string;
@@ -27,6 +29,7 @@ const App = () => {
             <Redirect to="/documents" />
           </Route>
         </Switch>
+        <ToastContainer closeOnClick hideProgressBar autoClose={3000} position="bottom-center"/>
       </div>
     </BrowserRouter>
   )
