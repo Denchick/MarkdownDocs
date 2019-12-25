@@ -1,7 +1,6 @@
 import React from "react";
 import MetaInfo from "../models/MetaInfo";
-import { Link } from "react-router-dom";
-import { copyToClipboard } from "../utils/common";
+import MetaInfoRow from "./MetaInfoRow";
 
 interface IDocumentsListProps {
   infos: MetaInfo[];
@@ -9,10 +8,6 @@ interface IDocumentsListProps {
 }
 
 const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
-  // const handleShareDocument = async () => {
-  //  
-  //}
-  
   const renderHeader = () => {
     return (
       <tr key="header">
@@ -23,34 +18,11 @@ const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
       </tr>
     );
   }
-    
-  const renderMetaInfo = (metaInfo: MetaInfo, index: number) => {
-    return (
-      <tr className={index % 2 === 0 ? "pure-table-odd" : undefined} key={metaInfo.id}>
-        <td>
-          <Link to={`/documents/${metaInfo.id}/`}>
-            {metaInfo.title || '<without name>'}
-          </Link>
-        </td>
-        <td>{new Date(metaInfo.editedAt).toLocaleString()}</td>
-        <td>{renderShare(metaInfo)}</td>
-        <td><button className="pure-button" onClick={async () => await handleDelete(metaInfo.id)}>Delete?</button></td>
-      </tr>
-    );
-  }
-
-  const renderShare = (metaInfo: MetaInfo) => {
-    // if (!metaInfo.shareToken) {
-    //   return <a href="#" onClick={() => }
-    // }
-    const path = `/documents/${metaInfo.shareToken}`;
-    return <a style={{textDecoration: 'underline'}} onClick={() => copyToClipboard(path)}>Copy ✂️ {path}</a>;
-  }
   
   return (
       <table className="pure-table">
         <thead>{renderHeader()}</thead>
-        <tbody>{infos.map((info, index) => renderMetaInfo(info, index))}</tbody>
+        <tbody>{infos.map((info, index) => <MetaInfoRow metaInfo={info} index={index} handleDelete={handleDelete}/>)}</tbody>
       </table>
   );
 }
