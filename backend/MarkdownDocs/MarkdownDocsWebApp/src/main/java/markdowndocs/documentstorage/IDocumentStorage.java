@@ -5,11 +5,12 @@ import markdowndocs.infrastructure.ValueResult;
 import markdowndocs.infrastructure.Result;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface IDocumentStorage {
 
-    ValueResult<Collection<MetaInfo>, String> GetDocumentInfos(UUID userId);
+    ValueResult<List<MetaInfo>, String> GetDocumentInfos(UUID userId);
 
     ValueResult<Document, DocumentStorageError> GetDocument(UUID documentId);
 

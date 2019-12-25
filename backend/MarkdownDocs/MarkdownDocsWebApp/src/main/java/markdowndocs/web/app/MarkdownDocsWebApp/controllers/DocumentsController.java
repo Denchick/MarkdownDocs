@@ -1,6 +1,8 @@
 package markdowndocs.web.app.MarkdownDocsWebApp.controllers;
 
 import markdowndocs.auth.IAuthService;
+import markdowndocs.documents.sharing.ISharingService;
+import markdowndocs.documents.sharing.ShareError;
 import markdowndocs.documentstorage.Document;
 import markdowndocs.documentstorage.DocumentStorageError;
 import markdowndocs.documentstorage.IDocumentStorage;
@@ -14,7 +16,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +30,9 @@ public class DocumentsController {
     @Autowired
     private IAuthService authService;
     @Autowired
+    private ISharingService sharingService;
+
+    @Autowired
     public DocumentsController(IDocumentStorage documentStorage) {
         this.documentStorage = documentStorage;
     }
@@ -36,12 +43,24 @@ public class DocumentsController {
         if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(userId);
+        ValueResult<List<MetaInfo>, String> result = documentStorage.GetDocumentInfos(userId);
 
-        if (result.isSuccess()) {
-            return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
+
+        if (!result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        List<MetaInfo> metaInfos = result.getValue();
+        for (MetaInfo metaInfo : metaInfos) {
+
+            ValueResult<String, ShareError> shareTokenResult = sharingService.GetShareTokenById(metaInfo.getId());
+            if (shareTokenResult.isSuccess())
+                metaInfo.setShareToken(shareTokenResult.getValue());
+            else
+                metaInfo.setShareToken("");
+        }
+        return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
+
     }
 
     @RequestMapping(value = "/{documentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

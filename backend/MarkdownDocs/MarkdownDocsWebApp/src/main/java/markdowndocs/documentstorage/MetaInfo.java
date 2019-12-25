@@ -7,6 +7,7 @@ import java.util.UUID;
 public class MetaInfo {
     private UUID id;
     private String title;
+    private String shareToken;
     private Date createAt;
     private Date editedAt;
 
@@ -57,5 +58,13 @@ public class MetaInfo {
     // just for mocking
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getShareToken() {
+        return shareToken;
+    }
+
+    public void setShareToken(String shareToken) {
+        this.shareToken = shareToken;
     }
 }

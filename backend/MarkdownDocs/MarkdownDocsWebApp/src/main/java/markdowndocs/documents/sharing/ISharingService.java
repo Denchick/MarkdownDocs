@@ -20,5 +20,7 @@ public interface ISharingService {
     public ValueResult<String, ShareError> ShareDocument(UUID documentId);
 
     public ValueResult<UUID, ShareError> GetDocumentIdByToken(String token);
+
+    public ValueResult<String, ShareError> GetShareTokenById(UUID documentId);
 }
 

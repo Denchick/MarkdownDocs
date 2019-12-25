@@ -29,17 +29,9 @@ public class ShareService implements ISharingService {
     public ValueResult<String, ShareError> ShareDocument(UUID documentId) {
         try {
 
-            List<ShareEntity> storedLinks = dataBaseAdapter.GetEntityWhereEq("documentId", documentId, ShareEntity.class);
-
-            if (storedLinks.size() > 1) {
-                logger.log(Level.SEVERE, "Unexpected link state find several share link for document " + documentId.toString());
-                return ResultsFactory.Failed(ShareError.UnknownError);
-            }
-
-            if (storedLinks.size() == 1) {
-                ShareEntity storedLink = storedLinks.get(0);
-                return ResultsFactory.Success(storedLink.getToken());
-            }
+            ValueResult<String, ShareError> findExistShareTokenResult = GetShareTokenById(documentId);
+            if (findExistShareTokenResult.isSuccess())
+                return ResultsFactory.Success(findExistShareTokenResult.getValue());
 
             String linkForSharing = GenerateShareLink(documentId);
             ShareEntity shareEntity = new ShareEntity();
@@ -74,6 +66,24 @@ public class ShareService implements ISharingService {
             logger.log(Level.SEVERE, "Can not get document by share link. " + error.getMessage());
             return ResultsFactory.Failed(ShareError.UnknownError);
         }
+    }
+
+    @Override
+    public ValueResult<String, ShareError> GetShareTokenById(UUID documentId) {
+        List<ShareEntity> storedLinks = dataBaseAdapter.GetEntityWhereEq("documentId", documentId, ShareEntity.class);
+
+        if (storedLinks.size() > 1) {
+            logger.log(Level.SEVERE, "Unexpected link state find several share link for document " + documentId.toString());
+            return ResultsFactory.Failed(ShareError.UnknownError);
+        }
+
+        if (storedLinks.isEmpty())
+            return ResultsFactory.Failed(ShareError.NotFound);
+
+        ShareEntity storedLink = storedLinks.get(0);
+        if (storedLink.getExpireAt().after(new Timestamp(System.currentTimeMillis())))
+            return ResultsFactory.Success(storedLink.getToken());
+        return ResultsFactory.Failed(ShareError.NotFound);
     }
 
     private String GenerateShareLink(UUID documentId) throws NoSuchAlgorithmException {

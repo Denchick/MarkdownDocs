@@ -30,7 +30,7 @@ public class DocumentStorage implements IDocumentStorage {
 
 
     @Override
-    public ValueResult<Collection<MetaInfo>, String> GetDocumentInfos(UUID userId) {
+    public ValueResult<List<MetaInfo>, String> GetDocumentInfos(UUID userId) {
         try {
 
             List<MetaInfo> result = new ArrayList<MetaInfo>();
