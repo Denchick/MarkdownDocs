@@ -9,7 +9,7 @@ import EditorPage from "./pages/EditorPage";
 import LoginPage from "./pages/LoginPage";
 import { ToastContainer } from "react-toastify";
 import RegisterPage from "./pages/RegisterPage";
-import { AuthorizedContext } from "./components/AuthorizedContext";
+import { AuthorizedContext } from "./utils/AuthorizedContext";
 import { isAuthorized } from "./utils/common";
 
 interface IAppState {

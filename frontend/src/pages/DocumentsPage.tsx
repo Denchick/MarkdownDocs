@@ -6,7 +6,7 @@ import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { AuthorizedContext } from "../components/AuthorizedContext";
+import { AuthorizedContext } from "../utils/AuthorizedContext";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;

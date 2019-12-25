@@ -3,7 +3,7 @@ import React from "react";
 import { loginUser } from "../api/UsersApi";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
-import { AuthorizedContext } from "../components/AuthorizedContext";
+import { AuthorizedContext } from "../utils/AuthorizedContext";
 
 interface ILoginPageState {
     login: string;
