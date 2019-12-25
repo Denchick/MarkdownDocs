@@ -105,7 +105,7 @@ public class AuthService implements IAuthService {
             if (documentEntity == null)
                 return true;
 
-            return userEntity.getId() == documentEntity.getOwner();
+            return userEntity.getId().equals(documentEntity.getOwner());
 
         } catch (Exception error) {
             logger.log(Level.SEVERE, "Can not check access. Error" + error.getMessage());

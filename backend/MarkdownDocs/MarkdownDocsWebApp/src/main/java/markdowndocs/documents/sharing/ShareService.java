@@ -18,6 +18,7 @@ public class ShareService implements ISharingService {
 
     private IDataBaseAdapter dataBaseAdapter;
     private Logger logger;
+    private long oneYearInMills = 365 * 3600 * 1000;
 
     public ShareService(IDataBaseAdapter dataBaseAdapter, Logger logger) {
         this.dataBaseAdapter = dataBaseAdapter;
@@ -44,7 +45,7 @@ public class ShareService implements ISharingService {
             ShareEntity shareEntity = new ShareEntity();
             shareEntity.setDocumentId(documentId);
             shareEntity.setToken(linkForSharing);
-            shareEntity.setExpireAt(new Timestamp(System.currentTimeMillis()));
+            shareEntity.setExpireAt(new Timestamp(System.currentTimeMillis() + oneYearInMills));
             dataBaseAdapter.Create(shareEntity);
             return ResultsFactory.Success(shareEntity.getToken());
 
