@@ -24,7 +24,6 @@ public class DocumentsController {
     private IDocumentStorage documentStorage;
     @Autowired
     private IAuthService authService;
-
     @Autowired
     public DocumentsController(IDocumentStorage documentStorage) {
         this.documentStorage = documentStorage;
