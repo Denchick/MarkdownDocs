@@ -17,6 +17,7 @@ import org.mockito.junit.MockitoRule;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -186,7 +187,7 @@ public class ORMDocumentStorageIntegrationTests {
 
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
-        ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
+        ValueResult<List<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
 
         assertTrue(result.isSuccess());
         assertTrue(result.getValue().contains(document1.getMetaInfo()));
@@ -203,7 +204,7 @@ public class ORMDocumentStorageIntegrationTests {
 
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
-        ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
+        ValueResult<List<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
 
         assertTrue(result.isSuccess());
         assertTrue(result.getValue().isEmpty());
@@ -216,7 +217,7 @@ public class ORMDocumentStorageIntegrationTests {
 
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
-        ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
+        ValueResult<List<MetaInfo>, String> result = documentStorage.GetDocumentInfos(ownerId);
 
         assertFalse(result.isSuccess());
     }
