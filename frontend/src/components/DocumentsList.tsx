@@ -9,9 +9,9 @@ interface IDocumentsListProps {
 }
 
 const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
-  const handleShareDocument = async () => {
-    
-  }
+  // const handleShareDocument = async () => {
+  //  
+  //}
   
   const renderHeader = () => {
     return (
@@ -40,9 +40,9 @@ const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
   }
 
   const renderShare = (metaInfo: MetaInfo) => {
-    if (!metaInfo.shareToken) {
-      return <a href="#" onClick={() => }
-    }
+    // if (!metaInfo.shareToken) {
+    //   return <a href="#" onClick={() => }
+    // }
     const path = `/documents/${metaInfo.shareToken}`;
     return <a style={{textDecoration: 'underline'}} onClick={() => copyToClipboard(path)}>Copy ✂️ {path}</a>;
   }

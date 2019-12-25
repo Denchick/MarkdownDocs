@@ -8,6 +8,8 @@ import UserInfoForm from './pages/RegisterPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import SharedDocumentPage from './pages/SharedDocumentPage';
+import sampleMarkdown from './sampleMarkdown';
 
 
 interface MatchParams {
@@ -33,6 +35,7 @@ const renderSwitch = () => {
   if (isAuthorized) {
     return (
       <Switch>
+        <Route path="/secret" component={() => <SharedDocumentPage content={sampleMarkdown as unknown as string} />} />
         <Route path="/documents/:documentId" component={( {match}: MatchProps) => (
           <EditorPage documentId={match.params.documentId} /> )}/>
         <Route path="/documents" component={() => <DocumentsPage getDocuments={getDocuments}/>} />
