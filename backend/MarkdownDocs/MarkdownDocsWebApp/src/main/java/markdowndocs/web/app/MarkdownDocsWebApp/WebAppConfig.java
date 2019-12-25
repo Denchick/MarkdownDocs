@@ -46,8 +46,7 @@ public class WebAppConfig {
         IAuthValidator authValidator = new CredentialsValidator();
         IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
         Logger logger = LoggerSingleton.create();
-        //return new AuthService(queryExecutor, authValidator, logger);
-        return new FakeAuthService();
+        return new AuthService(queryExecutor, authValidator, logger);
     }
 }
 

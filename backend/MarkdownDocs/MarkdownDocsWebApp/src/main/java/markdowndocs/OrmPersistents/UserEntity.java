@@ -70,7 +70,7 @@ public class UserEntity {
     public static UserEntity CreateEntityWithPasswordHashing(String login, String password, UUID userId) {
         UserEntity newUser = new UserEntity();
         newUser.setLogin(login);
-        //encrypt password
+        //should encrypt password
         newUser.setPasswordHash(password);
         newUser.setId(userId);
         return newUser;

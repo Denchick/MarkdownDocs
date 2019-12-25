@@ -1,10 +1,12 @@
 package markdowndocs.web.app.MarkdownDocsWebApp;
 
+
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.IQueryExecutor;
 import org.hibernate.SessionFactory;
+
 
 public class QueryExecutorSingleton {
 
@@ -27,6 +29,5 @@ public class QueryExecutorSingleton {
         queryExecutor = new DataStorageQueryExecutor(sessionFactory);
 
         return queryExecutor;
-
     }
 }

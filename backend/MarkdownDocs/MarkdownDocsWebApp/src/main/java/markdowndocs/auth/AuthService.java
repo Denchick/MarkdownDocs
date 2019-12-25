@@ -29,7 +29,7 @@ public class AuthService implements IAuthService {
     @Override
     public Result<AuthError> Registry(AuthCredentials credentials) {
 
-        if (validator.IsValidateCredentials(credentials)) {
+        if (!validator.IsValidateCredentials(credentials)) {
             logger.log(Level.SEVERE, "Invalid credentials");
             return ResultsFactory.FailedWith(AuthError.BadCredentials);
         }
@@ -59,7 +59,7 @@ public class AuthService implements IAuthService {
                 logger.log(Level.SEVERE, "Unknown user " + credentials.Login);
                 return ResultsFactory.Failed(AuthError.BadCredentials);
             }
-            String auth = AuthServiceHelper.GenerateAuth(credentials);
+            String auth = AuthServiceHelper.GenerateAuth(userEntity.getLogin(), userEntity.getPasswordHash());
             Timestamp expireAt = new Timestamp(System.currentTimeMillis() + threeDaysInMills);
             userEntity.setAuthToken(auth);
             userEntity.setExpireAt(expireAt);
