@@ -8,9 +8,10 @@ interface Document {
     String content;
 }
 
-interface MetaInfo {
+interface MetaInfo {	
     uuid Id;
     String title;
+    String shareToken;
     Timestamp createdAt;
     Timestamp updatedAt;
 }
@@ -27,7 +28,8 @@ interface MetaInfo {
     [
        {
        		String Id;
-       		String title;       		
+       		String title;  
+            String shareToken;
        		Timestamp updatedAt;
        		Timestamp createdAt;
        },
@@ -129,7 +131,7 @@ Response:
 
 ​         500 - если в результате обработки запроса возникли ошибки
 
-### `POST /users/login`
+### `POST /users/{login}`
 
 Залогинится в сервис.
 
@@ -166,7 +168,7 @@ Response:
 
 ```
 {
-	token : String
+	shareToken : String
 }
 ```
 
@@ -180,7 +182,7 @@ Response:
 
 
 
-## `GET /share/{token}`
+## `GET /share/{shareToken}`
 
 200 - в теле ответа документ.
 
