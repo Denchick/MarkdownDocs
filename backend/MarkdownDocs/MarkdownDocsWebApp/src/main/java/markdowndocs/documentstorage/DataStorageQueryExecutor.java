@@ -8,6 +8,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
+import org.springframework.core.GenericTypeResolver;
 
 import java.lang.annotation.Retention;
 import java.util.List;
@@ -25,10 +26,10 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         this.sessionFactory = sessionFactory;
     }
 
-    public DocumentEntity GetEntityBy(UUID id) throws Exception {
+    public <T> T GetEntityBy(UUID id, Class<T> type) throws Exception {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DocumentEntity result = session.get(DocumentEntity.class, id);
+        T result = session.get(type, id);
         session.getTransaction().commit();
 
         return result;

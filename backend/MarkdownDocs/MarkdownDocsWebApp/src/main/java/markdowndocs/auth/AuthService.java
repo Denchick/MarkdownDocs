@@ -1,5 +1,6 @@
 package markdowndocs.auth;
 
+import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.documentstorage.IQueryExecutor;
 import markdowndocs.infrastructure.Result;
@@ -18,6 +19,12 @@ public class AuthService implements IAuthService {
     private Logger logger;
     private IAuthValidator validator;
     private long threeDaysInMills = 3 * 3600 * 1000;
+
+    public AuthService(IQueryExecutor queryExecutor, IAuthValidator authValidator, Logger logger) {
+        this.queryExecutor = queryExecutor;
+        this.validator = authValidator;
+        this.logger = logger;
+    }
 
     @Override
     public Result<AuthError> Registry(AuthCredentials credentials) {
@@ -47,7 +54,7 @@ public class AuthService implements IAuthService {
         UUID userId = AuthServiceHelper.CreateId(credentials);
 
         try {
-            UserEntity userEntity = queryExecutor.GetEntityBy(userId);
+            UserEntity userEntity = queryExecutor.GetEntityBy(userId, UserEntity.class);
             if (userEntity == null) {
                 logger.log(Level.SEVERE, "Unknown user " + credentials.Login);
                 return ResultsFactory.Failed(AuthError.BadCredentials);
@@ -66,12 +73,41 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public ValueResult<Boolean, AuthError> NotAuthorized(String authToken, UUID userId) {
-        return null;
+    public boolean Authorized(String authToken, UUID userId) {
+
+        try {
+            UserEntity userEntity = queryExecutor.GetEntityBy(userId, UserEntity.class);
+
+            if (userEntity == null)
+                return false;
+            if (userEntity.getAuthToken().equals(authToken)) {
+                Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+                return userEntity.getExpireAt().after(currentTimestamp);
+            }
+            return false;
+
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "Can not Authorized. Error: " + error.getMessage());
+            return false;
+        }
+
     }
 
     @Override
-    public ValueResult<Boolean, AuthError> NotHaveAccess(UUID userId, UUID documentId) {
-        return null;
+    public boolean HaveAccess(UUID userId, UUID documentId) {
+        try {
+            UserEntity userEntity = queryExecutor.GetEntityBy(userId, UserEntity.class);
+            if (userEntity == null)
+                return false;
+            DocumentEntity documentEntity = queryExecutor.GetEntityBy(documentId, DocumentEntity.class);
+            if (documentEntity == null)
+                return true;
+
+            return userEntity.getId() == documentEntity.getOwner();
+
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, "Can not check access. Error" + error.getMessage());
+            return true;
+        }
     }
 }

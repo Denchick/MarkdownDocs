@@ -33,7 +33,7 @@ public class DocumentsController {
     @RequestMapping(value = "/", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<MetaInfo>> GetDocuments(@RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         ValueResult<Collection<MetaInfo>, String> result = documentStorage.GetDocumentInfos(userId);
@@ -47,10 +47,10 @@ public class DocumentsController {
     @RequestMapping(value = "/{documentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Document> GetDocument(@PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (authService.NotHaveAccess(userId, documentId))
+        if (!authService.HaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(documentId);
@@ -68,7 +68,7 @@ public class DocumentsController {
 
     @RequestMapping(value = "/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UUID> CreateDocument(@RequestBody CreateOrUpdateRequestBody createRequestBody, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         if (createRequestBody.title == null) {
@@ -85,10 +85,10 @@ public class DocumentsController {
 
     @RequestMapping(value = "/{documentId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity UpdateDocument(@RequestBody CreateOrUpdateRequestBody createRequestBody, @PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (authService.NotHaveAccess(userId, documentId))
+        if (!authService.HaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         if (createRequestBody.title == null) {
@@ -110,10 +110,10 @@ public class DocumentsController {
     @RequestMapping(value = "/{documentId}", method = RequestMethod.DELETE)
     public ResponseEntity DeleteDocument(@PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
-        if (authService.NotHaveAccess(userId, documentId))
+        if (!authService.HaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         Result<DocumentStorageError> result = documentStorage.DeleteDocument(documentId);

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IQueryExecutor {
-    public <T> T GetEntityBy(UUID id) throws Exception;
+    public <T> T GetEntityBy(UUID id, Class<T> type) throws Exception;
 
     public List<DocumentEntity> GetMetaInfoBy(UUID userId) throws Exception;
 

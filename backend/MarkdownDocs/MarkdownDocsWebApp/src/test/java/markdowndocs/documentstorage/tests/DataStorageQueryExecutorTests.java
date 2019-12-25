@@ -6,6 +6,7 @@ import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.Document;
 import markdowndocs.documentstorage.StorageEntityConverter;
 import markdowndocs.documentstorage.MetaInfo;
+import org.h2.engine.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -13,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.print.Doc;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +85,7 @@ public class DataStorageQueryExecutorTests {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
-        DocumentEntity storedEntity = queryExecutor.GetEntityBy(testEntity.getId());
+        DocumentEntity storedEntity = queryExecutor.GetEntityBy(testEntity.getId(), DocumentEntity.class);
 
         assertEquals(storedEntity, testEntity);
     }
@@ -150,6 +152,21 @@ public class DataStorageQueryExecutorTests {
         assertFalse(entityExist);
     }
 
+    @Test
+    public void Should_return_other_entity() throws Exception {
+        DocumentEntity documentEntity = CreateTestEntity();
+        UserEntity userEntity = CreateTestUser();
+        queryExecutor.Create(documentEntity);
+        queryExecutor.Create(userEntity);
+
+        DocumentEntity storedEntity = queryExecutor.GetEntityBy(documentEntity.getId(), DocumentEntity.class);
+        UserEntity storedUser = queryExecutor.GetEntityBy(userEntity.getId(), UserEntity.class);
+
+        assertEquals(documentEntity, storedEntity);
+        assertEquals(userEntity, storedUser);
+
+    }
+
 
     private DocumentEntity CreateTestEntity() {
         DocumentEntity testEntity = new DocumentEntity();
@@ -161,6 +178,14 @@ public class DataStorageQueryExecutorTests {
         testEntity.setContent("some content");
 
         return testEntity;
+    }
+
+    private UserEntity CreateTestUser() {
+        UserEntity testUser = new UserEntity();
+        testUser.setId(UUID.randomUUID());
+        testUser.setLogin("login");
+        testUser.setPasswordHash("hash");
+        return testUser;
     }
 
     @After

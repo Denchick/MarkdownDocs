@@ -14,8 +14,8 @@ public interface IAuthService {
 
     public ValueResult<Pair<UUID, String>, AuthError> Login(AuthCredentials credentials);
 
-    public ValueResult<Boolean, AuthError> NotAuthorized(String authToken, UUID userId);
+    public boolean Authorized(String authToken, UUID userId);
 
-    public ValueResult<Boolean, AuthError> NotHaveAccess(UUID userId, UUID documentId);
+    public boolean HaveAccess(UUID userId, UUID documentId);
 }
 

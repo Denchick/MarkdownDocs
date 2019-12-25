@@ -57,6 +57,15 @@ public class UserEntity {
     }
 
 
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UserEntity))
+            return false;
+        UserEntity objAsUser = (UserEntity) obj;
+        return getId().equals(objAsUser.getId())
+                && getLogin().equals(objAsUser.getLogin())
+                && getPasswordHash().equals(objAsUser.passwordHash);
+    }
 
     public static UserEntity CreateEntityWithPasswordHashing(String login, String password, UUID userId) {
         UserEntity newUser = new UserEntity();
