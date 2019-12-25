@@ -29,7 +29,7 @@ const App = () => {
 };
 
 const renderSwitch = () => {
-  const isAuthorized = Cookies.get('Auth') && Cookies.get('userId');
+  const isAuthorized = Cookies.get('auth') && Cookies.get('userId');
   if (isAuthorized) {
     return (
       <Switch>
@@ -45,13 +45,9 @@ const renderSwitch = () => {
 
   return (
     <Switch>
-      <Route path="/documents/:documentId" component={( {match}: MatchProps) => (
-        <EditorPage documentId={match.params.documentId} /> )}/>
       <Route path="/login" component={LoginPage} />
       <Route path="/register" component={UserInfoForm} />
-      <Route exact path="/">
-        <Redirect to="/login" />
-      </Route>
+      <Redirect to="/login" />
     </Switch>
   );
 }
