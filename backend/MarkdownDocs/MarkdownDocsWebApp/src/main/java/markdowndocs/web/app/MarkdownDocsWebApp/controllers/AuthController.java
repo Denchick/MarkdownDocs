@@ -24,7 +24,7 @@ public class AuthController {
     @Autowired
     private IAuthService authService;
 
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity Registry(@RequestBody RegistryRequestBody registryRequestBody) {
 
         AuthCredentials authCredentials = new AuthCredentials();
@@ -44,7 +44,7 @@ public class AuthController {
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(value = "users/{login}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{login}", method = RequestMethod.POST, consumes = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<LoginResponseBody> Login(@PathVariable String login, @RequestBody String password) {
 
         AuthCredentials authCredentials = new AuthCredentials();
