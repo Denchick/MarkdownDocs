@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponseBody> Registry(@RequestBody LoginRequestBody loginRequestBody) {
+    public ResponseEntity<LoginResponseBody> Login(@RequestBody LoginRequestBody loginRequestBody) {
 
         AuthCredentials authCredentials = new AuthCredentials();
 

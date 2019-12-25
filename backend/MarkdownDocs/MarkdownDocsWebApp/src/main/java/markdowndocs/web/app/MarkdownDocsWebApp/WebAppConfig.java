@@ -3,6 +3,8 @@ package markdowndocs.web.app.MarkdownDocsWebApp;
 import markdowndocs.auth.*;
 import markdowndocs.auth.helpers.CredentialsValidator;
 import markdowndocs.auth.helpers.IAuthValidator;
+import markdowndocs.documents.sharing.ISharingService;
+import markdowndocs.documents.sharing.ShareService;
 import markdowndocs.documentstorage.DocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
 import markdowndocs.orm.IDataBaseAdapter;
@@ -45,6 +47,13 @@ public class WebAppConfig {
         IDataBaseAdapter queryExecutor = QueryExecutorSingleton.create();
         Logger logger = LoggerSingleton.create();
         return new AuthService(queryExecutor, authValidator, logger);
+    }
+
+    @Bean
+    public ISharingService setupSharingServiceResolver() {
+        IDataBaseAdapter dataBaseAdapter = QueryExecutorSingleton.create();
+        Logger logger = LoggerSingleton.create();
+        return new ShareService(dataBaseAdapter, logger);
     }
 }
 

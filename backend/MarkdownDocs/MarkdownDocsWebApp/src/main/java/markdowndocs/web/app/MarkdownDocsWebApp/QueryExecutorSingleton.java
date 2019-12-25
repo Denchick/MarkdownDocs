@@ -2,6 +2,7 @@ package markdowndocs.web.app.MarkdownDocsWebApp;
 
 
 import markdowndocs.OrmPersistents.DocumentEntity;
+import markdowndocs.OrmPersistents.ShareEntity;
 import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.orm.DataBaseAdapter;
 import markdowndocs.orm.IDataBaseAdapter;
@@ -17,7 +18,7 @@ public class QueryExecutorSingleton {
             return queryExecutor;
 
         org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
-        configuration.addAnnotatedClass(DocumentEntity.class).addAnnotatedClass(UserEntity.class);
+        configuration.addAnnotatedClass(DocumentEntity.class).addAnnotatedClass(UserEntity.class).addAnnotatedClass(ShareEntity.class);
         configuration.setProperty("hibernate.dialect",
                 "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class",

@@ -129,17 +129,14 @@ Response:
 
 ​         500 - если в результате обработки запроса возникли ошибки
 
-### `GET /users`
+### `POST /users/login`
 
 Залогинится в сервис.
 
 Request:
 
 ```
-{
-	login: string 
-	password: string 
-}
+password: string
 ```
 
 

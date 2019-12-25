@@ -32,6 +32,27 @@ public class DataBaseAdapter implements IDataBaseAdapter {
         return result;
     }
 
+    @Override
+    public <T> T GetEntityBy(String id, Class<T> type) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        T result = session.get(type, id);
+        session.getTransaction().commit();
+
+        return result;
+    }
+
+    public <T> List<T> GetEntityWhereEq(String columnName, Object value, Class<T> type) {
+        Session session = sessionFactory.openSession();
+        Criteria cr = session.createCriteria(DocumentEntity.class)
+                .add(Restrictions.like("owner", value))
+                .setResultTransformer(Transformers.aliasToBean(type));
+        session.beginTransaction();
+        List<T> result = cr.list();
+        session.getTransaction().commit();
+        return result;
+    }
+
     public List<DocumentEntity> GetMetaInfoBy(UUID userId) throws Exception {
 
         Session session = sessionFactory.openSession();
@@ -73,6 +94,18 @@ public class DataBaseAdapter implements IDataBaseAdapter {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         DocumentEntity record = session.get(DocumentEntity.class, id);
+        session.getTransaction().commit();
+        session.beginTransaction();
+        session.delete(record);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public <T> void DeleteById(String id, Class<T> type) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        T record = session.get(type, id);
         session.getTransaction().commit();
         session.beginTransaction();
         session.delete(record);
