@@ -162,14 +162,12 @@ Response:
 
 ## `POST /share/{documentId}`
 
-Поделится ссылкой на документ в id {documentId}
+Включить document sharing и получить shareToken
 
-200 - в теле ответа ссылка на документ
+200, Content-Type="text/plain" и в теле ответа
 
 ```
-{
-	shareToken : String
-}
+"shareToken"
 ```
 
 404 - документ не найден
@@ -184,10 +182,12 @@ Response:
 
 ## `GET /share/{shareToken}`
 
-200 - в теле ответа документ.
+200, Content-Type="text/plain" и в теле ответа
+
+```
+"document content"
+```
 
 404 - не найдена
-
-401 - пользователь не аутентифицирован
 
 500  -  если в результате обработки запроса возникли ошибки
