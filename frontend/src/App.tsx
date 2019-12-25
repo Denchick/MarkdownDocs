@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import RegisterPage from "./pages/RegisterPage";
 import { AuthorizedContext } from "./utils/AuthorizedContext";
 import { isAuthorized } from "./utils/common";
+import Header from "./components/Header";
 
 interface IAppState {
     isAuthorized: boolean;
@@ -62,7 +63,7 @@ export default class App extends Component<{}, IAppState> {
                 changeValue: (value: boolean) => this.setState({isAuthorized: value})}
               }
             >
-              <h1 className="page-header"><a href="/">MarkdownDocs</a></h1>
+              <Header />
               <div className="container" >
                   <div className="demo">
                     <BrowserRouter>{this.renderSwitch()}</BrowserRouter>
