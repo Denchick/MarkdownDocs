@@ -4,6 +4,7 @@ import MetaInfo from "../models/MetaInfo";
 import DocumentsList from "../components/DocumentsList";
 import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";
+import Cookies from "js-cookie";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;
@@ -12,6 +13,7 @@ interface IDocumentsPageProps {
 interface IDocumentsPageState {
   infos: MetaInfo[];
   newDocumentId: string;
+  isLogouted: boolean;
 }
 
 export default class DocumentsPage extends PureComponent<IDocumentsPageProps, IDocumentsPageState>  {
@@ -19,7 +21,8 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     super(props);
     this.state = {
       infos: [],
-      newDocumentId: ''
+      newDocumentId: '',
+      isLogouted: false
     }
   }
   componentDidMount() {
@@ -38,6 +41,11 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     deleteDocument(documentId);
   }
 
+  handleLogout = () => {
+    Cookies.remove('auth');
+    Cookies.remove('userId');
+    this.setState({isLogouted: true});
+  }
 
   renderNoDocumentsMessage() {
     return (
@@ -54,6 +62,9 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
   }
 
   render() {
+    if (this.state.isLogouted) {
+      return <Redirect to={`/login`} />;
+    }
     if (this.state.newDocumentId)
       return <Redirect to={`/documents/${this.state.newDocumentId}`} />;
     if (this.state.infos.length === 0)
@@ -61,8 +72,11 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     return (
       <div>
         <DocumentsList infos={this.state.infos} handleDelete={this.handleDelete}/>
-        <button className="button-xlarge pure-button" style={{marginTop: 10}} onClick={this.handleCreateDocument.bind(this)}>
+        <button type="button" className="button-xlarge pure-button" style={{margin: '10px 10px 0 0'}} onClick={this.handleCreateDocument.bind(this)}>
           Create new document!
+        </button>
+        <button type="button" className="button-xlarge pure-button" style={{marginTop: 10}} onClick={this.handleLogout}>
+          Logout
         </button>
       </div>
     );

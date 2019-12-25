@@ -49,8 +49,8 @@ export default class LoginPage extends Component<{},ILoginPageState> {
             toast.info("Successs. Redirecting...");
             setTimeout(() => this.setState({timeToRedirect: true}), 3000);
         }
-        if (this.state.isSuccessLogin) {
-            return <Redirect push to="/documents" />
+        if (this.state.timeToRedirect) {
+            return <Redirect to="/documents" />
         }
         return (
             <div style={{width: 400}}>
