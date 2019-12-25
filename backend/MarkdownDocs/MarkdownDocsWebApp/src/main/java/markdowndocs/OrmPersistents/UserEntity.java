@@ -3,6 +3,7 @@ package markdowndocs.OrmPersistents;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -15,6 +16,10 @@ public class UserEntity {
     private String login;
     @Column(name = "password")
     private String passwordHash;
+    @Column(name = "authToken")
+    private String authToken;
+    @Column(name = "expireAt")
+    private Timestamp expireAt;
 
     public UserEntity() {
     }
@@ -42,4 +47,42 @@ public class UserEntity {
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
     }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UserEntity))
+            return false;
+        UserEntity objAsUser = (UserEntity) obj;
+        return getId().equals(objAsUser.getId())
+                && getLogin().equals(objAsUser.getLogin())
+                && getPasswordHash().equals(objAsUser.passwordHash);
+    }
+
+    public static UserEntity CreateEntityWithPasswordHashing(String login, String password, UUID userId) {
+        UserEntity newUser = new UserEntity();
+        newUser.setLogin(login);
+        //should encrypt password
+        newUser.setPasswordHash(password);
+        newUser.setId(userId);
+        return newUser;
+    }
+
+    public Timestamp getExpireAt() {
+        return expireAt;
+    }
+
+    public void setExpireAt(Timestamp expireAt) {
+        this.expireAt = expireAt;
+    }
 }
+
+

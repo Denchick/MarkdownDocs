@@ -1,7 +1,9 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import { getDocument, updateDocument } from '../api/DocumentsApi';
-import MetaInfo from '../domain/MetaInfo';
+import MetaInfo from '../models/MetaInfo';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const CodeMirror = require('react-codemirror');
 
 interface IEditorPageState {
@@ -48,6 +50,7 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
       content: state.markdownSource,
       metaInfo: state.metaInfo
     };
+    toast.info("Document saved successfully!");
     await updateDocument(document);
   }
 

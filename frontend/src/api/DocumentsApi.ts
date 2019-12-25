@@ -1,4 +1,4 @@
-import Document from "../domain/Document";
+import Document from "../models/Document";
 
 export const createDocument = async () => {
     const response = await fetch(`/api/documents/`, {
@@ -16,7 +16,7 @@ export const getDocuments = async () => {
 
 export const getDocument = async (documentId: string) => {    
     const response = await fetch(`/api/documents/${documentId}`);
-    return response.json() as unknown as Document;
+    return response.json();
 }
 
 export const updateDocument = async (document: Document) => {

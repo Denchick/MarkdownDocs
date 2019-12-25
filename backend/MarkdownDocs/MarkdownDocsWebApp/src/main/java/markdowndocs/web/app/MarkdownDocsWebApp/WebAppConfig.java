@@ -2,8 +2,7 @@ package markdowndocs.web.app.MarkdownDocsWebApp;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
-import markdowndocs.auth.FakeAuthService;
-import markdowndocs.auth.IAuthService;
+import markdowndocs.auth.*;
 import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.DocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import java.util.logging.Logger;
+
 
 @Configuration
 @EnableWebMvc
@@ -35,24 +35,18 @@ public class WebAppConfig {
 
     @Bean
     public IDocumentStorage setupDocumentStorageResolver() {
-        org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
-        configuration.addAnnotatedClass(DocumentEntity.class).addAnnotatedClass(UserEntity.class);
-        configuration.setProperty("hibernate.dialect",
-                "org.hibernate.dialect.H2Dialect");
-        configuration.setProperty("hibernate.connection.driver_class",
-                "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db;DB_CLOSE_ON_EXIT=FALSE");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-
-        IQueryExecutor queryExecutor = new DataStorageQueryExecutor(sessionFactory);
-        Logger logger = Logger.getLogger(DocumentStorage.class.getName());
+        IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
+        Logger logger = LoggerSingleton.create();
         return new DocumentStorage(queryExecutor, logger);
 
     }
 
     @Bean
     public IAuthService setupAuthServiceResolver() {
-        return new FakeAuthService();
+        IAuthValidator authValidator = new CredentialsValidator();
+        IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
+        Logger logger = LoggerSingleton.create();
+        return new AuthService(queryExecutor, authValidator, logger);
     }
-
 }
+

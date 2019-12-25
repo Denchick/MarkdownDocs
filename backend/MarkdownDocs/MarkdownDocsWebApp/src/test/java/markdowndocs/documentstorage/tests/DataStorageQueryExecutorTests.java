@@ -4,8 +4,9 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.documentstorage.DataStorageQueryExecutor;
 import markdowndocs.documentstorage.Document;
-import markdowndocs.documentstorage.EntityConverter;
+import markdowndocs.documentstorage.StorageEntityConverter;
 import markdowndocs.documentstorage.MetaInfo;
+import org.h2.engine.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -13,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.print.Doc;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +34,7 @@ public class DataStorageQueryExecutorTests {
                 "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class",
                 "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./testing_db");
         configuration.setProperty("hibernate.hbm2ddl.auto", "create");
         sessionFactory = configuration.buildSessionFactory();
 
@@ -83,7 +85,7 @@ public class DataStorageQueryExecutorTests {
         DocumentEntity testEntity = CreateTestEntity();
         queryExecutor.Create(testEntity);
 
-        DocumentEntity storedEntity = queryExecutor.GetDocumentBy(testEntity.getId());
+        DocumentEntity storedEntity = queryExecutor.GetEntityBy(testEntity.getId(), DocumentEntity.class);
 
         assertEquals(storedEntity, testEntity);
     }
@@ -99,15 +101,15 @@ public class DataStorageQueryExecutorTests {
         queryExecutor.Create(entity1);
         queryExecutor.Create(entity2);
 
-        Document entity1AsDocument = EntityConverter.DbEntityToDocument(entity1);
-        Document entity2AsDocument = EntityConverter.DbEntityToDocument(entity2);
+        Document entity1AsDocument = StorageEntityConverter.DbEntityToDocument(entity1);
+        Document entity2AsDocument = StorageEntityConverter.DbEntityToDocument(entity2);
 
         List<DocumentEntity> rows = queryExecutor.GetMetaInfoBy(userId);
         List<MetaInfo> actualMetas = new ArrayList<>();
 
         for (DocumentEntity row : rows
         ) {
-            actualMetas.add(EntityConverter.DbEntityToDocument(row).getMetaInfo());
+            actualMetas.add(StorageEntityConverter.DbEntityToDocument(row).getMetaInfo());
         }
 
         assertTrue(actualMetas.contains(entity1AsDocument.getMetaInfo()));
@@ -150,6 +152,21 @@ public class DataStorageQueryExecutorTests {
         assertFalse(entityExist);
     }
 
+    @Test
+    public void Should_return_other_entity() throws Exception {
+        DocumentEntity documentEntity = CreateTestEntity();
+        UserEntity userEntity = CreateTestUser();
+        queryExecutor.Create(documentEntity);
+        queryExecutor.Create(userEntity);
+
+        DocumentEntity storedEntity = queryExecutor.GetEntityBy(documentEntity.getId(), DocumentEntity.class);
+        UserEntity storedUser = queryExecutor.GetEntityBy(userEntity.getId(), UserEntity.class);
+
+        assertEquals(documentEntity, storedEntity);
+        assertEquals(userEntity, storedUser);
+
+    }
+
 
     private DocumentEntity CreateTestEntity() {
         DocumentEntity testEntity = new DocumentEntity();
@@ -161,6 +178,14 @@ public class DataStorageQueryExecutorTests {
         testEntity.setContent("some content");
 
         return testEntity;
+    }
+
+    private UserEntity CreateTestUser() {
+        UserEntity testUser = new UserEntity();
+        testUser.setId(UUID.randomUUID());
+        testUser.setLogin("login");
+        testUser.setPasswordHash("hash");
+        return testUser;
     }
 
     @After
