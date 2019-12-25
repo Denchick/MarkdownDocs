@@ -5,13 +5,16 @@ import Cookies from 'js-cookie'
 
 export const loginUser = async (userCredentials: UserCredentials): Promise<boolean> => {
     const response = await fetch(`/api/users/${userCredentials.login}/`, {
+        method: 'POST',
         body: userCredentials.password
     })
-    
+    console.log(response);
     if (response.ok) {
-        const {userId, Auth} = response.json() as unknown as LoginUserResponse;
+        const {userId, auth} = response.json() as unknown as LoginUserResponse;
         Cookies.set('userId', userId)
-        Cookies.set('Auth', Auth)
+        Cookies.set('auth', auth)
+        
+        return true;
     }
 
     return false;
