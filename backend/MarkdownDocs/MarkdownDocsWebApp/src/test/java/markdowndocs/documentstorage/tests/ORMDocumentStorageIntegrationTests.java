@@ -4,6 +4,7 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.documentstorage.*;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.orm.IDataBaseAdapter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class ORMDocumentStorageIntegrationTests {
 
     @Mock
-    private IQueryExecutor queryExecutor;
+    private IDataBaseAdapter queryExecutor;
 
     @Rule
     public MockitoRule mockitoRule;
@@ -36,7 +37,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Before
     public void Before() {
         mockitoRule = MockitoJUnit.rule();
-        queryExecutor = mock(IQueryExecutor.class);
+        queryExecutor = mock(IDataBaseAdapter.class);
     }
 
     @Test
@@ -88,7 +89,7 @@ public class ORMDocumentStorageIntegrationTests {
     public void Should_call_update_query_executor_when_storage_update_document() throws Exception {
 
         DocumentEntity storedDocument = StorageEntityConverter.DocumentToDbEntity(CreateDocument(), UUID.randomUUID());
-        when(queryExecutor.GetEntityBy(any(), eq(DocumentEntity.class))).thenReturn(storedDocument);
+        when(queryExecutor.GetEntityBy(any(UUID.class), eq(DocumentEntity.class))).thenReturn(storedDocument);
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
         String newTitle = "new title";
         String newContent = "new content";
@@ -108,7 +109,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_update_failed_when_query_executor_throw_exception() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetEntityBy(any(), eq(DocumentEntity.class))).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
+        when(queryExecutor.GetEntityBy(any(UUID.class), eq(DocumentEntity.class))).thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
         doThrow(new Exception("some db error")).when(queryExecutor).Update(any());
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
@@ -137,7 +138,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_get_document_from_storage() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetEntityBy(any(), eq(DocumentEntity.class)))
+        when(queryExecutor.GetEntityBy(any(UUID.class), eq(DocumentEntity.class)))
                 .thenReturn(StorageEntityConverter.DocumentToDbEntity(testDocument, UUID.randomUUID()));
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
@@ -151,7 +152,7 @@ public class ORMDocumentStorageIntegrationTests {
     public void Should_get_fail_when_query_executor_throw_exception() throws Exception {
 
         Document testDocument = CreateDocument();
-        doThrow(new Exception("some db error")).when(queryExecutor).GetEntityBy(any(), eq(DocumentEntity.class));
+        doThrow(new Exception("some db error")).when(queryExecutor).GetEntityBy(any(UUID.class), eq(DocumentEntity.class));
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(testDocument.getMetaInfo().getId());
@@ -163,7 +164,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Test
     public void Should_get_fail_when_document_not_contain_in_storage() throws Exception {
         Document testDocument = CreateDocument();
-        when(queryExecutor.GetEntityBy(any(), eq(DocumentEntity.class))).thenReturn(null);
+        when(queryExecutor.GetEntityBy(any(UUID.class), eq(DocumentEntity.class))).thenReturn(null);
         IDocumentStorage documentStorage = new DocumentStorage(queryExecutor, CreateLogger());
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(testDocument.getMetaInfo().getId());

@@ -4,6 +4,7 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.orm.IDataBaseAdapter;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.logging.Logger;
 public class DocumentStorage implements IDocumentStorage {
 
     private Logger logger;
-    private IQueryExecutor queryExecutor;
+    private IDataBaseAdapter queryExecutor;
 
     public DocumentStorage() {
     }
 
-    public DocumentStorage(IQueryExecutor queryExecutor, Logger logger) {
+    public DocumentStorage(IDataBaseAdapter queryExecutor, Logger logger) {
         this.queryExecutor = queryExecutor;
         this.logger = logger;
     }

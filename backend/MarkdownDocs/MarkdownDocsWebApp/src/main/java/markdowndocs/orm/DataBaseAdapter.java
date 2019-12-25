@@ -1,4 +1,4 @@
-package markdowndocs.documentstorage;
+package markdowndocs.orm;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import org.hibernate.Criteria;
@@ -6,23 +6,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
-import org.springframework.core.GenericTypeResolver;
 
-import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.UUID;
 
-public class DataStorageQueryExecutor implements IQueryExecutor {
+public class DataBaseAdapter implements IDataBaseAdapter {
 
     private SessionFactory sessionFactory;
 
-    public DataStorageQueryExecutor() {
+    public DataBaseAdapter() {
 
     }
 
-    public DataStorageQueryExecutor(SessionFactory sessionFactory) {
+    public DataBaseAdapter(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -32,6 +29,27 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         T result = session.get(type, id);
         session.getTransaction().commit();
 
+        return result;
+    }
+
+    @Override
+    public <T> T GetEntityBy(String id, Class<T> type) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        T result = session.get(type, id);
+        session.getTransaction().commit();
+
+        return result;
+    }
+
+    public <T> List<T> GetEntityWhereEq(String columnName, Object value, Class<T> type) {
+        Session session = sessionFactory.openSession();
+        Criteria cr = session.createCriteria(DocumentEntity.class)
+                .add(Restrictions.like("owner", value))
+                .setResultTransformer(Transformers.aliasToBean(type));
+        session.beginTransaction();
+        List<T> result = cr.list();
+        session.getTransaction().commit();
         return result;
     }
 
@@ -76,6 +94,18 @@ public class DataStorageQueryExecutor implements IQueryExecutor {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         DocumentEntity record = session.get(DocumentEntity.class, id);
+        session.getTransaction().commit();
+        session.beginTransaction();
+        session.delete(record);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public <T> void DeleteById(String id, Class<T> type) throws Exception {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        T record = session.get(type, id);
         session.getTransaction().commit();
         session.beginTransaction();
         session.delete(record);

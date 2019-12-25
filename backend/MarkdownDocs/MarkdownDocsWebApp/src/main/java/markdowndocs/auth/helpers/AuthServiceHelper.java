@@ -1,4 +1,6 @@
-package markdowndocs.auth;
+package markdowndocs.auth.helpers;
+
+import markdowndocs.auth.AuthCredentials;
 
 import javax.xml.bind.DatatypeConverter;
 import java.security.MessageDigest;

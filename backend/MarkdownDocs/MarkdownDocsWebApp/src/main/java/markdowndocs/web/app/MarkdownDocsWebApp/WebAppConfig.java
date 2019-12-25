@@ -1,13 +1,13 @@
 package markdowndocs.web.app.MarkdownDocsWebApp;
 
-import markdowndocs.OrmPersistents.DocumentEntity;
-import markdowndocs.OrmPersistents.UserEntity;
 import markdowndocs.auth.*;
-import markdowndocs.documentstorage.DataStorageQueryExecutor;
+import markdowndocs.auth.helpers.CredentialsValidator;
+import markdowndocs.auth.helpers.IAuthValidator;
+import markdowndocs.documents.sharing.ISharingService;
+import markdowndocs.documents.sharing.ShareService;
 import markdowndocs.documentstorage.DocumentStorage;
 import markdowndocs.documentstorage.IDocumentStorage;
-import markdowndocs.documentstorage.IQueryExecutor;
-import org.hibernate.SessionFactory;
+import markdowndocs.orm.IDataBaseAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class WebAppConfig {
 
     @Bean
     public IDocumentStorage setupDocumentStorageResolver() {
-        IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
+        IDataBaseAdapter queryExecutor = QueryExecutorSingleton.create();
         Logger logger = LoggerSingleton.create();
         return new DocumentStorage(queryExecutor, logger);
 
@@ -44,9 +44,16 @@ public class WebAppConfig {
     @Bean
     public IAuthService setupAuthServiceResolver() {
         IAuthValidator authValidator = new CredentialsValidator();
-        IQueryExecutor queryExecutor = QueryExecutorSingleton.create();
+        IDataBaseAdapter queryExecutor = QueryExecutorSingleton.create();
         Logger logger = LoggerSingleton.create();
         return new AuthService(queryExecutor, authValidator, logger);
+    }
+
+    @Bean
+    public ISharingService setupSharingServiceResolver() {
+        IDataBaseAdapter dataBaseAdapter = QueryExecutorSingleton.create();
+        Logger logger = LoggerSingleton.create();
+        return new ShareService(dataBaseAdapter, logger);
     }
 }
 
