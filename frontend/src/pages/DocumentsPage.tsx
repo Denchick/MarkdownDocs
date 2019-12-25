@@ -1,6 +1,6 @@
 import { PureComponent } from "react";
 import React from "react";
-import MetaInfo from "../domain/MetaInfo";
+import MetaInfo from "../models/MetaInfo";
 import DocumentsList from "../components/DocumentsList";
 import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";

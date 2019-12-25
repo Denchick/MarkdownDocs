@@ -1,5 +1,5 @@
 import React from "react";
-import MetaInfo from "../domain/MetaInfo";
+import MetaInfo from "../models/MetaInfo";
 import { Link } from "react-router-dom";
 
 interface IDocumentsListProps {

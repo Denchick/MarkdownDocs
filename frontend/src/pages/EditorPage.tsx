@@ -1,7 +1,7 @@
 import React from 'react';
 import Markdown from 'react-markdown';
 import { getDocument, updateDocument } from '../api/DocumentsApi';
-import MetaInfo from '../domain/MetaInfo';
+import MetaInfo from '../models/MetaInfo';
 const CodeMirror = require('react-codemirror');
 
 interface IEditorPageState {
