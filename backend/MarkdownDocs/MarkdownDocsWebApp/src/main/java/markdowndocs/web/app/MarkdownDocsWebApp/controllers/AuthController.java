@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -47,13 +44,13 @@ public class AuthController {
         return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<LoginResponseBody> Login(@RequestBody LoginRequestBody loginRequestBody) {
+    @RequestMapping(value = "users/{login}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<LoginResponseBody> Login(@PathVariable String login, @RequestBody String password) {
 
         AuthCredentials authCredentials = new AuthCredentials();
 
-        authCredentials.Login = loginRequestBody.login;
-        authCredentials.Password = loginRequestBody.password;
+        authCredentials.Login = login;
+        authCredentials.Password = password;
 
         ValueResult<Pair<UUID, String>, AuthError> result = authService.Login(authCredentials);
 
