@@ -6,6 +6,7 @@ import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import { AuthorizedContext } from "../components/AuthorizedContext";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;
@@ -47,10 +48,11 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     }
   }
 
-  handleLogout = () => {
+  handleLogout = (changeValue: (value: boolean) => void) => {
     Cookies.remove('auth');
     Cookies.remove('userId');
     this.setState({isLogouted: true});
+    changeValue(false);
   }
 
   renderNoDocumentsMessage() {
@@ -81,9 +83,19 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
         <button type="button" className="button-xlarge pure-button" style={{margin: '10px 10px 0 0'}} onClick={this.handleCreateDocument.bind(this)}>
           Create new document!
         </button>
-        <button type="button" className="button-xlarge pure-button" style={{marginTop: 10}} onClick={this.handleLogout}>
-          Logout
-        </button>
+        <AuthorizedContext.Consumer>
+          {
+            ({changeValue}) => (
+              <button
+                type="button"
+                className="button-xlarge pure-button"
+                style={{marginTop: 10}}
+                onClick={() => this.handleLogout(changeValue)}>
+                Logout
+              </button>
+            )
+          }
+        </AuthorizedContext.Consumer>
       </div>
     );
   }

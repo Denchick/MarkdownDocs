@@ -12,7 +12,7 @@ code {
     monospace;
 }
 
-#main {
+.container {
   padding: 10px 20px;
 }
 

@@ -34,7 +34,6 @@ const DocumentsList = ({infos, handleDelete}: IDocumentsListProps) => {
         </td>
         <td>{new Date(metaInfo.editedAt).toLocaleString()}</td>
         <td>{renderShare(metaInfo)}</td>
-        {// TODO МБ убрать можно async await}
         <td><button className="pure-button" onClick={async () => await handleDelete(metaInfo.id)}>Delete?</button></td>
       </tr>
     );
