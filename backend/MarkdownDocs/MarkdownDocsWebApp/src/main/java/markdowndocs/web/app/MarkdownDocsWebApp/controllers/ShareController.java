@@ -1,4 +1,4 @@
-package markdowndocs.web.app.MarkdownDocsWebApp;
+package markdowndocs.web.app.MarkdownDocsWebApp.controllers;
 
 import markdowndocs.auth.IAuthService;
 import markdowndocs.documents.sharing.ISharingService;
@@ -29,7 +29,7 @@ public class ShareController {
     @RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Document> GetDocumentByToken(@PathVariable String token, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
 
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         ValueResult<UUID, ShareError> result = sharingService.GetDocumentIdByToken(token);
@@ -56,9 +56,9 @@ public class ShareController {
 
     @RequestMapping(value = "/{documentId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> CreateToken(@PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
-        if (authService.NotAuthorized(authToken, userId))
+        if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        if (authService.NotHaveAccess(userId, documentId))
+        if (!authService.HaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
         ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(documentId);

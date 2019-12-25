@@ -1,4 +1,4 @@
-package markdowndocs.documentstorage;
+package markdowndocs.orm;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import org.hibernate.Criteria;
@@ -6,23 +6,20 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
-import org.springframework.core.GenericTypeResolver;
 
-import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.UUID;
 
-public class DataStorageQueryExecutor implements IQueryExecutor {
+public class DataBaseAdapter implements IDataBaseAdapter {
 
     private SessionFactory sessionFactory;
 
-    public DataStorageQueryExecutor() {
+    public DataBaseAdapter() {
 
     }
 
-    public DataStorageQueryExecutor(SessionFactory sessionFactory) {
+    public DataBaseAdapter(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 

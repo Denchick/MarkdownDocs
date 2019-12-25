@@ -3,16 +3,16 @@ package markdowndocs.web.app.MarkdownDocsWebApp;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
-import markdowndocs.documentstorage.DataStorageQueryExecutor;
-import markdowndocs.documentstorage.IQueryExecutor;
+import markdowndocs.orm.DataBaseAdapter;
+import markdowndocs.orm.IDataBaseAdapter;
 import org.hibernate.SessionFactory;
 
 
 public class QueryExecutorSingleton {
 
-    private static IQueryExecutor queryExecutor;
+    private static IDataBaseAdapter queryExecutor;
 
-    public static IQueryExecutor create() {
+    public static IDataBaseAdapter create() {
         if (queryExecutor != null)
             return queryExecutor;
 
@@ -26,7 +26,7 @@ public class QueryExecutorSingleton {
         configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db;DB_CLOSE_ON_EXIT=FALSE");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
 
-        queryExecutor = new DataStorageQueryExecutor(sessionFactory);
+        queryExecutor = new DataBaseAdapter(sessionFactory);
 
         return queryExecutor;
     }

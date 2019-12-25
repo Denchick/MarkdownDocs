@@ -2,7 +2,9 @@ package markdowndocs.auth;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
-import markdowndocs.documentstorage.IQueryExecutor;
+import markdowndocs.auth.helpers.AuthServiceHelper;
+import markdowndocs.auth.helpers.IAuthValidator;
+import markdowndocs.orm.IDataBaseAdapter;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
@@ -15,12 +17,12 @@ import java.util.logging.Logger;
 
 
 public class AuthService implements IAuthService {
-    private IQueryExecutor queryExecutor;
+    private IDataBaseAdapter queryExecutor;
     private Logger logger;
     private IAuthValidator validator;
     private long threeDaysInMills = 3 * 3600 * 1000;
 
-    public AuthService(IQueryExecutor queryExecutor, IAuthValidator authValidator, Logger logger) {
+    public AuthService(IDataBaseAdapter queryExecutor, IAuthValidator authValidator, Logger logger) {
         this.queryExecutor = queryExecutor;
         this.validator = authValidator;
         this.logger = logger;

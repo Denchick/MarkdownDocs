@@ -2,11 +2,10 @@ package markdowndocs.documentstorage.tests;
 
 import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.UserEntity;
-import markdowndocs.documentstorage.DataStorageQueryExecutor;
+import markdowndocs.orm.DataBaseAdapter;
 import markdowndocs.documentstorage.Document;
 import markdowndocs.documentstorage.StorageEntityConverter;
 import markdowndocs.documentstorage.MetaInfo;
-import org.h2.engine.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -14,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.print.Doc;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ import static org.junit.Assert.*;
 
 public class DataStorageQueryExecutorTests {
     private SessionFactory sessionFactory;
-    private DataStorageQueryExecutor queryExecutor;
+    private DataBaseAdapter queryExecutor;
 
     @Before
     public void Before() {
@@ -38,7 +36,7 @@ public class DataStorageQueryExecutorTests {
         configuration.setProperty("hibernate.hbm2ddl.auto", "create");
         sessionFactory = configuration.buildSessionFactory();
 
-        queryExecutor = new DataStorageQueryExecutor(sessionFactory);
+        queryExecutor = new DataBaseAdapter(sessionFactory);
 
     }
 

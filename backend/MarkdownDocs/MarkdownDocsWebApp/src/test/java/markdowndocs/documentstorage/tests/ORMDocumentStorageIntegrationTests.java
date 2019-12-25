@@ -4,6 +4,7 @@ import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.documentstorage.*;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.orm.IDataBaseAdapter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class ORMDocumentStorageIntegrationTests {
 
     @Mock
-    private IQueryExecutor queryExecutor;
+    private IDataBaseAdapter queryExecutor;
 
     @Rule
     public MockitoRule mockitoRule;
@@ -36,7 +37,7 @@ public class ORMDocumentStorageIntegrationTests {
     @Before
     public void Before() {
         mockitoRule = MockitoJUnit.rule();
-        queryExecutor = mock(IQueryExecutor.class);
+        queryExecutor = mock(IDataBaseAdapter.class);
     }
 
     @Test

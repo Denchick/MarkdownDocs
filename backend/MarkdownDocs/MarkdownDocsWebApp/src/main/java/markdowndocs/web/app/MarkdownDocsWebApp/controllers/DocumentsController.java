@@ -1,4 +1,4 @@
-package markdowndocs.web.app.MarkdownDocsWebApp;
+package markdowndocs.web.app.MarkdownDocsWebApp.controllers;
 
 import markdowndocs.auth.IAuthService;
 import markdowndocs.documentstorage.Document;
@@ -7,6 +7,7 @@ import markdowndocs.documentstorage.IDocumentStorage;
 import markdowndocs.documentstorage.MetaInfo;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.web.app.MarkdownDocsWebApp.models.CreateOrUpdateRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

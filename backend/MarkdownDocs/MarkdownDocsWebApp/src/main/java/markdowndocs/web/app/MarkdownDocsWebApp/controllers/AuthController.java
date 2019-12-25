@@ -1,10 +1,13 @@
-package markdowndocs.web.app.MarkdownDocsWebApp;
+package markdowndocs.web.app.MarkdownDocsWebApp.controllers;
 
 import markdowndocs.auth.AuthCredentials;
 import markdowndocs.auth.AuthError;
 import markdowndocs.auth.IAuthService;
 import markdowndocs.infrastructure.Result;
 import markdowndocs.infrastructure.ValueResult;
+import markdowndocs.web.app.MarkdownDocsWebApp.models.LoginRequestBody;
+import markdowndocs.web.app.MarkdownDocsWebApp.models.LoginResponseBody;
+import markdowndocs.web.app.MarkdownDocsWebApp.models.RegistryRequestBody;
 import org.javatuples.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

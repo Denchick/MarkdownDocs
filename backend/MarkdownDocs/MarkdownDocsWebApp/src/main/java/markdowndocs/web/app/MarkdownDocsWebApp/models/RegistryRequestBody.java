@@ -1,4 +1,4 @@
-package markdowndocs.web.app.MarkdownDocsWebApp;
+package markdowndocs.web.app.MarkdownDocsWebApp.models;
 
 public class RegistryRequestBody {
     public String login;
