@@ -34,7 +34,7 @@ public class DataStorageQueryExecutorTests {
                 "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.connection.driver_class",
                 "org.h2.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./test_db");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:./testing_db");
         configuration.setProperty("hibernate.hbm2ddl.auto", "create");
         sessionFactory = configuration.buildSessionFactory();
 
