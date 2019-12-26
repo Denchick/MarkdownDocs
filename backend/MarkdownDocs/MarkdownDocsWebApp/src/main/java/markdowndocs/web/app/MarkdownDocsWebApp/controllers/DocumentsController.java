@@ -49,16 +49,6 @@ public class DocumentsController {
         if (!result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-        List<MetaInfo> metaInfos = result.getValue();
-        for (MetaInfo metaInfo : metaInfos) {
-
-            ValueResult<String, ShareError> shareTokenResult = sharingService.GetShareTokenById(metaInfo.getId());
-            if (shareTokenResult.isSuccess())
-                metaInfo.setShareToken(shareTokenResult.getValue());
-            else
-                metaInfo.setShareToken("");
-        }
         return new ResponseEntity<>(result.getValue(), HttpStatus.OK);
 
     }

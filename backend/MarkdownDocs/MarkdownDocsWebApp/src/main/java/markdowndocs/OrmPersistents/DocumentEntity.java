@@ -23,13 +23,15 @@ public class DocumentEntity {
     private Timestamp editedAt;
     @Column(name = "content", columnDefinition = "Text")
     private String content;
+    @Column(name = "shareToken")
+    private String shareToken;
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof DocumentEntity))
             return false;
 
-        DocumentEntity asEntity = (DocumentEntity)obj;
+        DocumentEntity asEntity = (DocumentEntity) obj;
 
         return asEntity.getId() == this.getId()
                 && asEntity.getContent().equals(getContent())
@@ -90,5 +92,13 @@ public class DocumentEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getShareToken() {
+        return shareToken;
+    }
+
+    public void setShareToken(String shareToken) {
+        this.shareToken = shareToken;
     }
 }

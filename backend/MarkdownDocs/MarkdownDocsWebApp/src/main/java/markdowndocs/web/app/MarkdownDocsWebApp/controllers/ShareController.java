@@ -26,9 +26,9 @@ public class ShareController {
     @Autowired
     private ISharingService sharingService;
 
-    @RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    public ResponseEntity<String> GetDocumentByToken(@PathVariable String token) {
-        ValueResult<UUID, ShareError> result = sharingService.GetDocumentIdByToken(token);
+    @RequestMapping(value = "/{shareToken}", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> GetDocumentByToken(@PathVariable String shareToken) {
+        ValueResult<UUID, ShareError> result = sharingService.GetDocumentIdByToken(shareToken);
 
         if (result.isSuccess()) {
             ValueResult<Document, DocumentStorageError> documentResult = documentStorage.GetDocument(result.getValue());
@@ -57,17 +57,15 @@ public class ShareController {
         if (!authService.HaveAccess(userId, documentId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 
-        ValueResult<Document, DocumentStorageError> result = documentStorage.GetDocument(documentId);
+        ValueResult<String, ShareError> shareResult = sharingService.ShareDocument(documentId);
+        if (shareResult.isSuccess())
+            return new ResponseEntity<>("/share/" + shareResult.getValue(), HttpStatus.OK);
 
-        if (result.isSuccess()) {
-            ValueResult<String, ShareError> shareResult = sharingService.ShareDocument(result.getValue().getMetaInfo().getId());
-            if (shareResult.isSuccess())
-                return new ResponseEntity<>("/share/" + shareResult.getValue(), HttpStatus.OK);
-
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        if (shareResult.getError() == ShareError.NotFound)
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 }

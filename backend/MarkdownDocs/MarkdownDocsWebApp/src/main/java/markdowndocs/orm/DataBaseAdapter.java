@@ -63,7 +63,9 @@ public class DataBaseAdapter implements IDataBaseAdapter {
                         .add(Projections.property("title"), "title")
                         .add(Projections.property("createAt"), "createAt")
                         .add(Projections.property("editedAt"), "editedAt")
-                        .add(Projections.property("owner"), "owner"))
+                        .add(Projections.property("owner"), "owner")
+                        .add(Projections.property("shareToken"), "shareToken"))
+
                 .setResultTransformer(Transformers.aliasToBean(DocumentEntity.class));
         session.beginTransaction();
         List<DocumentEntity> result = cr.list();

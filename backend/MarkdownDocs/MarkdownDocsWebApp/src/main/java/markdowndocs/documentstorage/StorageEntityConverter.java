@@ -31,6 +31,7 @@ public class StorageEntityConverter {
         metaInfo.setTitle(documentEntity.getTitle());
         metaInfo.setCreateAt(documentEntity.getCreateAt());
         metaInfo.setEditedAt(documentEntity.getEditedAt());
+        metaInfo.setShareToken(documentEntity.getShareToken());
 
         return new Document(metaInfo, documentEntity.getContent());
     }

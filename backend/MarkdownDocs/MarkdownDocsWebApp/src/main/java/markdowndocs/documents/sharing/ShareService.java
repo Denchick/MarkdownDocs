@@ -1,5 +1,6 @@
 package markdowndocs.documents.sharing;
 
+import markdowndocs.OrmPersistents.DocumentEntity;
 import markdowndocs.OrmPersistents.ShareEntity;
 import markdowndocs.infrastructure.ResultsFactory;
 import markdowndocs.infrastructure.ValueResult;
@@ -33,12 +34,23 @@ public class ShareService implements ISharingService {
             if (findExistShareTokenResult.isSuccess())
                 return ResultsFactory.Success(findExistShareTokenResult.getValue());
 
+            DocumentEntity sharingDocument = dataBaseAdapter.GetEntityBy(documentId, DocumentEntity.class);
+
+            if (sharingDocument == null) {
+                return ResultsFactory.Failed(ShareError.NotFound);
+            }
+
             String linkForSharing = GenerateShareLink(documentId);
             ShareEntity shareEntity = new ShareEntity();
             shareEntity.setDocumentId(documentId);
             shareEntity.setToken(linkForSharing);
             shareEntity.setExpireAt(new Timestamp(System.currentTimeMillis() + oneYearInMills));
             dataBaseAdapter.Create(shareEntity);
+
+
+            sharingDocument.setShareToken(shareEntity.getToken());
+            dataBaseAdapter.Update(sharingDocument);
+
             return ResultsFactory.Success(shareEntity.getToken());
 
         } catch (Exception error) {
