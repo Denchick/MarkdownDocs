@@ -2,7 +2,6 @@ import { Component } from "react";
 import { RouteComponentProps, Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
 import React from "react";
 import SharedDocumentPage from "./pages/SharedDocumentPage";
-import sampleMarkdown from "./sampleMarkdown";
 import { getDocuments } from "./api/DocumentsApi";
 import DocumentsPage from "./pages/DocumentsPage";
 import EditorPage from "./pages/EditorPage";
@@ -30,8 +29,8 @@ interface DocumentMatchProps extends RouteComponentProps<DocumentMatchParams> { 
 interface ShareMatchProps extends RouteComponentProps<ShareMatchParams> { }
 
 export default class App extends Component<{}, IAppState> {
-    constructor({}) {
-        super({});
+    constructor(props: any) {
+        super(props);
         this.state = {
           isAuthorized: !!isAuthorized(),
         }

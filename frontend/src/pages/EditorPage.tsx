@@ -4,7 +4,6 @@ import { getDocument, updateDocument } from '../api/DocumentsApi';
 import MetaInfo from '../models/MetaInfo';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Document from "../models/Document";
 const CodeMirror = require('react-codemirror');
 
 interface IEditorPageState {

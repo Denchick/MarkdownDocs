@@ -30,16 +30,16 @@ export default class MetaInfoRow extends Component<IMetaInfoRowProps, IMetaInfoR
   }
   
   renderShare() {
-      if (!this.state.shareToken) {
-        return <a href="#" onClick={this.handleShare.bind(this)}> share it!</a>
-      }
-      const path = `/share/${this.state.shareToken}`;
-      return (
-        <button className="pure-button" onClick={() => copyToClipboard(path)}>
-          Copy ✂️ {path}
-        </button>
-      );
+    if (!this.state.shareToken) {
+      return <button className="pure-button" onClick={this.handleShare.bind(this)}> share it!</button>
     }
+    const path = `/share/${this.state.shareToken}`;
+    return (
+      <button className="pure-button" onClick={() => copyToClipboard(path)}>
+        Copy <span role="img" aria-label="Copy">✂️</span> {path}
+      </button>
+    );
+  }
 
   render() {
     const {metaInfo, index, handleDelete} = this.props;
