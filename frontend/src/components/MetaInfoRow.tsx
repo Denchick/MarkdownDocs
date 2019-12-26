@@ -33,7 +33,7 @@ export default class MetaInfoRow extends Component<IMetaInfoRowProps, IMetaInfoR
       if (!this.state.shareToken) {
         return <a href="#" onClick={this.handleShare.bind(this)}> share it!</a>
       }
-      const path = `/documents/${this.state.shareToken}`;
+      const path = `/share/${this.state.shareToken}`;
       return (
         <button className="pure-button" onClick={() => copyToClipboard(path)}>
           Copy ✂️ {path}
