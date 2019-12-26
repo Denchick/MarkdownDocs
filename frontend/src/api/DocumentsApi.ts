@@ -47,7 +47,7 @@ export const updateDocument = async (document: Document) => {
 }
 
 export const deleteDocument = async (documentId: string) => {
-    await fetch(`/api/documents/${documentId}/`, {
+    return await fetch(`/api/documents/${documentId}/`, {
         method: 'DELETE',
         headers: {
             userId: Cookies.get('userId') || '',

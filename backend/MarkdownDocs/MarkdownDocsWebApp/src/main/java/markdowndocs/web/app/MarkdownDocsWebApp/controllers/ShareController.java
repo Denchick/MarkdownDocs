@@ -26,19 +26,15 @@ public class ShareController {
     @Autowired
     private ISharingService sharingService;
 
-    @RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Document> GetDocumentByToken(@PathVariable String token, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
-
-        if (!authService.Authorized(authToken, userId))
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-
+    @RequestMapping(value = "/{token}", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    public ResponseEntity<String> GetDocumentByToken(@PathVariable String token) {
         ValueResult<UUID, ShareError> result = sharingService.GetDocumentIdByToken(token);
 
         if (result.isSuccess()) {
             ValueResult<Document, DocumentStorageError> documentResult = documentStorage.GetDocument(result.getValue());
 
             if (documentResult.isSuccess())
-                return new ResponseEntity<>(documentResult.getValue(), HttpStatus.OK);
+                return new ResponseEntity<>(documentResult.getValue().getContent(), HttpStatus.OK);
             DocumentStorageError getDocumentError = documentResult.getError();
 
             if (getDocumentError == DocumentStorageError.NotFound)
@@ -54,7 +50,7 @@ public class ShareController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @RequestMapping(value = "/{documentId}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{documentId}", method = RequestMethod.POST, produces = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<String> CreateToken(@PathVariable UUID documentId, @RequestHeader("Auth") String authToken, @RequestHeader("userId") UUID userId) {
         if (!authService.Authorized(authToken, userId))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

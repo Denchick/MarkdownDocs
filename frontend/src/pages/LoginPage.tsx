@@ -3,6 +3,7 @@ import React from "react";
 import { loginUser } from "../api/UsersApi";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
+import { AuthorizedContext } from "../utils/AuthorizedContext";
 
 interface ILoginPageState {
     login: string;
@@ -29,7 +30,7 @@ export default class LoginPage extends Component<{},ILoginPageState> {
         this.setState({password: event.target.value});
     }
     
-    handleSubmit = async () => {
+    handleSubmit = async (changeValue: (value: boolean) => void) => {
         if (!this.state.login || !this.state.password) {
             toast.error("Fill username and password fields");
             return;
@@ -39,6 +40,7 @@ export default class LoginPage extends Component<{},ILoginPageState> {
             toast.error("Something goes wrong");
         }
         this.setState({isSuccessLogin: isSuccess})
+        changeValue(isSuccess);
     }
 
     render() {
@@ -70,7 +72,19 @@ export default class LoginPage extends Component<{},ILoginPageState> {
                             onChange={this.handlePasswordChange}
                         />
                     </fieldset>
-                    <button type="button" className="pure-button pure-input-1" onClick={this.handleSubmit}>Sign in!</button>
+                    <AuthorizedContext.Consumer>
+                        {
+                            ({changeValue}) => (
+                                <button
+                                    type="button"
+                                    className="pure-button pure-input-1"
+                                    onClick={() => this.handleSubmit(changeValue)}
+                                >
+                                    Sign in!
+                                </button>
+                            )
+                        }
+                    </AuthorizedContext.Consumer>
                 </form>
                 <p>Not registered yet? <a href="/register">Let's do this!</a></p>
             </div>

@@ -5,6 +5,7 @@ import DocumentsList from "../components/DocumentsList";
 import { Redirect } from "react-router";
 import { createDocument, deleteDocument } from "../api/DocumentsApi";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 interface IDocumentsPageProps {
   getDocuments: () => Promise<MetaInfo[]>;
@@ -36,15 +37,21 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
     this.setState({newDocumentId: documentId});
   }
 
-  handleDelete = (documentId: string) => {
+  handleDelete = async (documentId: string) => {
     this.setState({infos: this.state.infos.filter(info => info.id !== documentId)})
-    deleteDocument(documentId);
+    const response = await deleteDocument(documentId);
+    if (response.ok) {
+      toast.info("Deleted success!");
+    } else {
+      toast.error("Something goes wrong")
+    }
   }
 
-  handleLogout = () => {
+  handleLogout = (changeValue: (value: boolean) => void) => {
     Cookies.remove('auth');
     Cookies.remove('userId');
     this.setState({isLogouted: true});
+    changeValue(false);
   }
 
   renderNoDocumentsMessage() {
@@ -74,9 +81,6 @@ export default class DocumentsPage extends PureComponent<IDocumentsPageProps, ID
         <DocumentsList infos={this.state.infos} handleDelete={this.handleDelete}/>
         <button type="button" className="button-xlarge pure-button" style={{margin: '10px 10px 0 0'}} onClick={this.handleCreateDocument.bind(this)}>
           Create new document!
-        </button>
-        <button type="button" className="button-xlarge pure-button" style={{marginTop: 10}} onClick={this.handleLogout}>
-          Logout
         </button>
       </div>
     );
