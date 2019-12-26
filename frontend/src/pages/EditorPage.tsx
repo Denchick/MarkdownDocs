@@ -43,7 +43,7 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
       toast.error("Something goes wrong");
       return;
     }
-    const document = response.json() as unknown as Document;
+    const document = await response.json();
     this.setState({
       markdownSource: document.content,
       metaInfo: document.metaInfo

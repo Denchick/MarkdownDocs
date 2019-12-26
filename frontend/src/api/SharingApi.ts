@@ -1,5 +1,4 @@
 import Cookies from "js-cookie"
-import { toast } from "react-toastify";
 
 export const toShareDocument = async (documentId: string) => {
     const response = await fetch(`/api/share/${documentId}/`, {
