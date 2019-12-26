@@ -59,7 +59,7 @@ public class ShareController {
 
         ValueResult<String, ShareError> shareResult = sharingService.ShareDocument(documentId);
         if (shareResult.isSuccess())
-            return new ResponseEntity<>("/share/" + shareResult.getValue(), HttpStatus.OK);
+            return new ResponseEntity<>(shareResult.getValue(), HttpStatus.OK);
 
         if (shareResult.getError() == ShareError.NotFound)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
