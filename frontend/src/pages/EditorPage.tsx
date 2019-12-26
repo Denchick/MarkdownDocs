@@ -4,10 +4,11 @@ import { getDocument, updateDocument } from '../api/DocumentsApi';
 import MetaInfo from '../models/MetaInfo';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Document from "../models/Document";
 const CodeMirror = require('react-codemirror');
 
 interface IEditorPageState {
-  markdownSource: string;
+  markdownSource: string | null;
   metaInfo: MetaInfo;
 }
 
@@ -28,7 +29,7 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
 
     this.handleMarkdownChange = this.handleMarkdownChange.bind(this)
     this.state = {
-      markdownSource: '',
+      markdownSource: null,
       metaInfo: null as unknown as MetaInfo
     }
   }
@@ -37,7 +38,12 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
     this.setState({markdownSource: value})
   }
   async componentDidMount() {
-    const document = await getDocument(this.props.documentId);
+    const response = await getDocument(this.props.documentId);
+    if (!response.ok) {
+      toast.error("Something goes wrong");
+      return;
+    }
+    const document = await response.json();
     this.setState({
       markdownSource: document.content,
       metaInfo: document.metaInfo
@@ -47,7 +53,7 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
 
   async handleSave(state: IEditorPageState) {
     const document = {
-      content: state.markdownSource,
+      content: state.markdownSource || '',
       metaInfo: state.metaInfo
     };
     toast.info("Document saved successfully!");
@@ -55,6 +61,10 @@ export default class EditorPage extends React.PureComponent<IEditorPageProps, IE
   }
 
   render() {
+    if (this.state.markdownSource === null) {
+      return null;
+    }
+
     return (
       <div className="demo">
         <div className="editor-pane">

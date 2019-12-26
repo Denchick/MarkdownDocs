@@ -31,7 +31,7 @@ export const getDocument = async (documentId: string) => {
             auth: Cookies.get('auth') || ''
         }
     });
-    return response.json();
+    return response;
 }
 
 export const updateDocument = async (document: Document) => {
