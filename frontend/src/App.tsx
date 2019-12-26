@@ -54,6 +54,8 @@ export default class App extends Component<{}, IAppState> {
       
         return (
           <Switch>
+            <Route path="/share/:token" component={( {match}: ShareMatchProps) => (
+              <SharedDocumentPage token={match.params.token} />  )} />
             <Route path="/login" component={LoginPage} />
             <Route path="/register" component={RegisterPage} />
             <Redirect to="/login" />
