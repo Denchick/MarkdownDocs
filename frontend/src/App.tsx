@@ -14,15 +14,20 @@ import { isAuthorized } from "./utils/common";
 import Header from "./components/Header";
 
 interface IAppState {
-    isAuthorized: boolean;
+  isAuthorized: boolean;
 }
 
-interface MatchParams {
-    documentId: string;
+interface DocumentMatchParams {
+  documentId: string;
 }
 
-interface MatchProps extends RouteComponentProps<MatchParams> {
+interface ShareMatchParams {
+  token: string;
 }
+
+interface DocumentMatchProps extends RouteComponentProps<DocumentMatchParams> { }
+
+interface ShareMatchProps extends RouteComponentProps<ShareMatchParams> { }
 
 export default class App extends Component<{}, IAppState> {
     constructor({}) {
@@ -37,9 +42,10 @@ export default class App extends Component<{}, IAppState> {
         if (this.state.isAuthorized) {
           return (
             <Switch>
-                <Route path="/secret" component={() => <SharedDocumentPage content={sampleMarkdown} />} />
-                <Route path="/documents/:documentId" component={( {match}: MatchProps) => (
-                    <EditorPage documentId={match.params.documentId} /> )}/>
+                <Route path="/share/:token" component={( {match}: ShareMatchProps) => (
+                  <SharedDocumentPage token={match.params.token} />  )} />
+                <Route path="/documents/:documentId" component={( {match}: DocumentMatchProps) => (
+                  <EditorPage documentId={match.params.documentId} /> )}/>
                 <Route path="/documents" component={() => <DocumentsPage getDocuments={getDocuments}/>} />
                 <Redirect to="/documents" />
             </Switch>
